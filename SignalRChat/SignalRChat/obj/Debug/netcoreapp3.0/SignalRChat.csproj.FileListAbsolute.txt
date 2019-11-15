@@ -1,0 +1,9 @@
+C:\Users\aznzl\source\repos\SignalRChat\SignalRChat\obj\Debug\netcoreapp3.0\SignalRChat.csprojAssemblyReference.cache
+C:\Users\aznzl\source\repos\SignalRChat\SignalRChat\obj\Debug\netcoreapp3.0\SignalRChat.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\aznzl\source\repos\SignalRChat\SignalRChat\obj\Debug\netcoreapp3.0\SignalRChat.AssemblyInfoInputs.cache
+C:\Users\aznzl\source\repos\SignalRChat\SignalRChat\obj\Debug\netcoreapp3.0\SignalRChat.AssemblyInfo.cs
+C:\Users\aznzl\source\repos\SignalRChat\SignalRChat\obj\Debug\netcoreapp3.0\SignalRChat.TagHelpers.input.cache
+C:\Users\aznzl\source\repos\SignalRChat\SignalRChat\obj\Debug\netcoreapp3.0\SignalRChat.TagHelpers.output.cache
+C:\Users\aznzl\source\repos\SignalRChat\SignalRChat\obj\Debug\netcoreapp3.0\SignalRChat.dll
+C:\Users\aznzl\source\repos\SignalRChat\SignalRChat\obj\Debug\netcoreapp3.0\SignalRChat.pdb
+C:\Users\aznzl\source\repos\SignalRChat\SignalRChat\obj\Debug\netcoreapp3.0\SignalRChat.RazorCoreGenerate.cache
