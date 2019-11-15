@@ -1,0 +1,138 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\aznzl\\source\\repos\\ChatAppV3\\ChatAppV3\\ChatAppV3.Android\\ChatAppV3.Android.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\aznzl\\source\\repos\\ChatAppV3\\ChatAppV3\\ChatAppV3.Android\\ChatAppV3.Android.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\aznzl\\source\\repos\\ChatAppV3\\ChatAppV3\\ChatAppV3.Android\\ChatAppV3.Android.csproj",
+        "projectName": "ChatAppV3.Android",
+        "projectPath": "C:\\Users\\aznzl\\source\\repos\\ChatAppV3\\ChatAppV3\\ChatAppV3.Android\\ChatAppV3.Android.csproj",
+        "packagesPath": "C:\\Users\\aznzl\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\aznzl\\source\\repos\\ChatAppV3\\ChatAppV3\\ChatAppV3.Android\\obj\\",
+        "projectStyle": "PackageReference",
+        "skipContentFileWrite": true,
+        "fallbackFolders": [
+          "C:\\Microsoft\\Xamarin\\NuGet\\"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\aznzl\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "monoandroid90"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "monoandroid90": {
+            "projectReferences": {
+              "C:\\Users\\aznzl\\source\\repos\\ChatAppV3\\ChatAppV3\\ChatAppV3\\ChatAppV3.csproj": {
+                "projectPath": "C:\\Users\\aznzl\\source\\repos\\ChatAppV3\\ChatAppV3\\ChatAppV3\\ChatAppV3.csproj"
+              }
+            }
+          }
+        }
+      },
+      "frameworks": {
+        "monoandroid90": {
+          "dependencies": {
+            "Microsoft.AspNetCore.SignalR.Client": {
+              "target": "Package",
+              "version": "[3.0.0, )"
+            },
+            "Xamarin.Android.Support.Core.Utils": {
+              "target": "Package",
+              "version": "[28.0.0.1, )"
+            },
+            "Xamarin.Essentials": {
+              "target": "Package",
+              "version": "[1.2.0, )"
+            },
+            "Xamarin.Forms": {
+              "target": "Package",
+              "version": "[4.2.0.709249, )"
+            }
+          }
+        }
+      }
+    },
+    "C:\\Users\\aznzl\\source\\repos\\ChatAppV3\\ChatAppV3\\ChatAppV3\\ChatAppV3.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\aznzl\\source\\repos\\ChatAppV3\\ChatAppV3\\ChatAppV3\\ChatAppV3.csproj",
+        "projectName": "ChatAppV3",
+        "projectPath": "C:\\Users\\aznzl\\source\\repos\\ChatAppV3\\ChatAppV3\\ChatAppV3\\ChatAppV3.csproj",
+        "packagesPath": "C:\\Users\\aznzl\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\aznzl\\source\\repos\\ChatAppV3\\ChatAppV3\\ChatAppV3\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Microsoft\\Xamarin\\NuGet\\",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\aznzl\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netstandard2.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netstandard2.0": {
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netstandard2.0": {
+          "dependencies": {
+            "Microsoft.AspNetCore.SignalR.Client": {
+              "target": "Package",
+              "version": "[3.0.0, )"
+            },
+            "NETStandard.Library": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.0.3, )",
+              "autoReferenced": true
+            },
+            "Xamarin.Essentials": {
+              "target": "Package",
+              "version": "[1.2.0, )"
+            },
+            "Xamarin.Forms": {
+              "target": "Package",
+              "version": "[4.2.0.709249, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.0.100\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

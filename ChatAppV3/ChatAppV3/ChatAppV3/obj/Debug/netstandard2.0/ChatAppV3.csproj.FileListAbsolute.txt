@@ -1,0 +1,13 @@
+C:\Users\aznzl\source\repos\ChatAppV3\ChatAppV3\ChatAppV3\bin\Debug\netstandard2.0\ChatAppV3.deps.json
+C:\Users\aznzl\source\repos\ChatAppV3\ChatAppV3\ChatAppV3\bin\Debug\netstandard2.0\ChatAppV3.dll
+C:\Users\aznzl\source\repos\ChatAppV3\ChatAppV3\ChatAppV3\obj\Debug\netstandard2.0\ChatAppV3.csprojAssemblyReference.cache
+C:\Users\aznzl\source\repos\ChatAppV3\ChatAppV3\ChatAppV3\obj\Debug\netstandard2.0\App.xaml.g.cs
+C:\Users\aznzl\source\repos\ChatAppV3\ChatAppV3\ChatAppV3\obj\Debug\netstandard2.0\Views\MainPage.xaml.g.cs
+C:\Users\aznzl\source\repos\ChatAppV3\ChatAppV3\ChatAppV3\obj\Debug\netstandard2.0\ChatAppV3.AssemblyInfoInputs.cache
+C:\Users\aznzl\source\repos\ChatAppV3\ChatAppV3\ChatAppV3\obj\Debug\netstandard2.0\ChatAppV3.AssemblyInfo.cs
+C:\Users\aznzl\source\repos\ChatAppV3\ChatAppV3\ChatAppV3\bin\Debug\netstandard2.0\ref\ChatAppV3.dll
+C:\Users\aznzl\source\repos\ChatAppV3\ChatAppV3\ChatAppV3\bin\Debug\netstandard2.0\ChatAppV3.pdb
+C:\Users\aznzl\source\repos\ChatAppV3\ChatAppV3\ChatAppV3\obj\Debug\netstandard2.0\XamlC.stamp
+C:\Users\aznzl\source\repos\ChatAppV3\ChatAppV3\ChatAppV3\obj\Debug\netstandard2.0\ChatAppV3.dll
+C:\Users\aznzl\source\repos\ChatAppV3\ChatAppV3\ChatAppV3\obj\Debug\netstandard2.0\ref\ChatAppV3.dll
+C:\Users\aznzl\source\repos\ChatAppV3\ChatAppV3\ChatAppV3\obj\Debug\netstandard2.0\ChatAppV3.pdb
