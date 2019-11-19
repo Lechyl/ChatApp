@@ -11864,11 +11864,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\aznzl\\source\\repos\\SignalRChat\\SignalRChat\\SignalRChat.csproj",
+      "projectUniqueName": "C:\\Users\\aznzl\\Desktop\\Github\\ChatApp\\SignalRChat\\SignalRChat\\SignalRChat.csproj",
       "projectName": "SignalRChat",
-      "projectPath": "C:\\Users\\aznzl\\source\\repos\\SignalRChat\\SignalRChat\\SignalRChat.csproj",
+      "projectPath": "C:\\Users\\aznzl\\Desktop\\Github\\ChatApp\\SignalRChat\\SignalRChat\\SignalRChat.csproj",
       "packagesPath": "C:\\Users\\aznzl\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\aznzl\\source\\repos\\SignalRChat\\SignalRChat\\obj\\",
+      "outputPath": "C:\\Users\\aznzl\\Desktop\\Github\\ChatApp\\SignalRChat\\SignalRChat\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Microsoft\\Xamarin\\NuGet\\",

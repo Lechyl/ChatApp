@@ -2783,11 +2783,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\aznzl\\source\\repos\\ChatAppV3\\ChatAppV3\\ChatAppV3.iOS\\ChatAppV3.iOS.csproj",
+      "projectUniqueName": "C:\\Users\\aznzl\\Desktop\\Github\\ChatApp\\ChatAppV3\\ChatAppV3\\ChatAppV3.iOS\\ChatAppV3.iOS.csproj",
       "projectName": "ChatAppV3.iOS",
-      "projectPath": "C:\\Users\\aznzl\\source\\repos\\ChatAppV3\\ChatAppV3\\ChatAppV3.iOS\\ChatAppV3.iOS.csproj",
+      "projectPath": "C:\\Users\\aznzl\\Desktop\\Github\\ChatApp\\ChatAppV3\\ChatAppV3\\ChatAppV3.iOS\\ChatAppV3.iOS.csproj",
       "packagesPath": "C:\\Users\\aznzl\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\aznzl\\source\\repos\\ChatAppV3\\ChatAppV3\\ChatAppV3.iOS\\obj\\",
+      "outputPath": "C:\\Users\\aznzl\\Desktop\\Github\\ChatApp\\ChatAppV3\\ChatAppV3\\ChatAppV3.iOS\\obj\\",
       "projectStyle": "PackageReference",
       "skipContentFileWrite": true,
       "fallbackFolders": [
@@ -2808,8 +2808,8 @@
       "frameworks": {
         "xamarinios10": {
           "projectReferences": {
-            "C:\\Users\\aznzl\\source\\repos\\ChatAppV3\\ChatAppV3\\ChatAppV3\\ChatAppV3.csproj": {
-              "projectPath": "C:\\Users\\aznzl\\source\\repos\\ChatAppV3\\ChatAppV3\\ChatAppV3\\ChatAppV3.csproj"
+            "C:\\Users\\aznzl\\Desktop\\Github\\ChatApp\\ChatAppV3\\ChatAppV3\\ChatAppV3\\ChatAppV3.csproj": {
+              "projectPath": "C:\\Users\\aznzl\\Desktop\\Github\\ChatApp\\ChatAppV3\\ChatAppV3\\ChatAppV3\\ChatAppV3.csproj"
             }
           }
         }

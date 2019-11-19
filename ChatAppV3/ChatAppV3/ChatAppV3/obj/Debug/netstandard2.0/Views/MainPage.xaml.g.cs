@@ -8,9 +8,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: global::Xamarin.Forms.Xaml.XamlResourceIdAttribute("ChatAppV3.Views.MainPage.xaml", "Views/MainPage.xaml", typeof(global::ChatAppV3.MainPage))]
+[assembly: global::Xamarin.Forms.Xaml.XamlResourceIdAttribute("ChatAppV3.Views.MainPage.xaml", "Views/MainPage.xaml", typeof(global::ChatAppV3.Views.MainPage))]
 
-namespace ChatAppV3 {
+namespace ChatAppV3.Views {
     
     
     [global::Xamarin.Forms.Xaml.XamlFilePathAttribute("Views\\MainPage.xaml")]

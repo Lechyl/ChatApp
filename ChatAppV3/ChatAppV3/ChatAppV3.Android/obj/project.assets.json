@@ -2756,11 +2756,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\aznzl\\source\\repos\\ChatAppV3\\ChatAppV3\\ChatAppV3.Android\\ChatAppV3.Android.csproj",
+      "projectUniqueName": "C:\\Users\\aznzl\\Desktop\\Github\\ChatApp\\ChatAppV3\\ChatAppV3\\ChatAppV3.Android\\ChatAppV3.Android.csproj",
       "projectName": "ChatAppV3.Android",
-      "projectPath": "C:\\Users\\aznzl\\source\\repos\\ChatAppV3\\ChatAppV3\\ChatAppV3.Android\\ChatAppV3.Android.csproj",
+      "projectPath": "C:\\Users\\aznzl\\Desktop\\Github\\ChatApp\\ChatAppV3\\ChatAppV3\\ChatAppV3.Android\\ChatAppV3.Android.csproj",
       "packagesPath": "C:\\Users\\aznzl\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\aznzl\\source\\repos\\ChatAppV3\\ChatAppV3\\ChatAppV3.Android\\obj\\",
+      "outputPath": "C:\\Users\\aznzl\\Desktop\\Github\\ChatApp\\ChatAppV3\\ChatAppV3\\ChatAppV3.Android\\obj\\",
       "projectStyle": "PackageReference",
       "skipContentFileWrite": true,
       "fallbackFolders": [
@@ -2781,8 +2781,8 @@
       "frameworks": {
         "monoandroid90": {
           "projectReferences": {
-            "C:\\Users\\aznzl\\source\\repos\\ChatAppV3\\ChatAppV3\\ChatAppV3\\ChatAppV3.csproj": {
-              "projectPath": "C:\\Users\\aznzl\\source\\repos\\ChatAppV3\\ChatAppV3\\ChatAppV3\\ChatAppV3.csproj"
+            "C:\\Users\\aznzl\\Desktop\\Github\\ChatApp\\ChatAppV3\\ChatAppV3\\ChatAppV3\\ChatAppV3.csproj": {
+              "projectPath": "C:\\Users\\aznzl\\Desktop\\Github\\ChatApp\\ChatAppV3\\ChatAppV3\\ChatAppV3\\ChatAppV3.csproj"
             }
           }
         }

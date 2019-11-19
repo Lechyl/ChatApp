@@ -1,6 +1,7 @@
 ﻿using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using ChatAppV3.Views;
 
 namespace ChatAppV3
 {
@@ -9,8 +10,8 @@ namespace ChatAppV3
         public App()
         {
             InitializeComponent();
-
-            MainPage = new MainPage();
+            
+            MainPage = new NavigationPage( new LoginPage());
         }
 
         protected override void OnStart()

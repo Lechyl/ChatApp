@@ -5,8 +5,12 @@ using System.Threading.Tasks;
 
 namespace SignalRChat.Database
 {
-    public class SendMessageToUser
+    public class SendMessageToOfflineUser
     {
 
+        public void SendMessage(string message, string user, string friend)
+        {
+            
+        }
     }
 }
