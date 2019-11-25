@@ -1094,3 +1094,5 @@ C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3.Android\obj\
 C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3.Android\obj\Debug\90\stamp\_GenerateJavaStubs.stamp
 C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3.Android\obj\Debug\90\stamp\_GeneratePackageManagerJava.stamp
 C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3.Android\obj\Debug\90\stamp\_ResolveLibraryProjectImports.stamp
+C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3.Android\obj\Debug\90\linksrc\Newtonsoft.Json.dll
+C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3.Android\obj\Debug\90\android\assets\Newtonsoft.Json.dll

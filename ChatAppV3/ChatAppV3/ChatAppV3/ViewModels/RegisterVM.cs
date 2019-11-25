@@ -18,8 +18,11 @@ namespace ChatAppV3.ViewModels
         {
             IsError = false;
             IsRedirect = false;
-            HubConnClient hub = new HubConnClient();
-            hubConnection = hub.HubConn();
+
+            hubConnection = new HubConnectionBuilder()
+               .WithUrl($"http://172.16.3.63:5565/chathub")
+             .Build();
+
 
             LoginCommand = new Command(async () =>
             {

@@ -8,14 +8,16 @@ namespace ChatAppV3.HubClientCon
 {
     class HubConnClient
     {
-        public HubConnection HubConn()
+        public HubConnection hub;
+        public HubConnClient()
         {
+            hub = new HubConnectionBuilder()
+                .WithUrl($"http://172.16.3.53:5565/chathub")
+                    .WithAutomaticReconnect()
+                        .Build();
 
-            HubConnection hubConnection = new HubConnectionBuilder()
-                .WithUrl($"http://172.16.3.63:5565/chathub")
-                .Build();
-
-            return hubConnection;
         }
+
+
     }
 }

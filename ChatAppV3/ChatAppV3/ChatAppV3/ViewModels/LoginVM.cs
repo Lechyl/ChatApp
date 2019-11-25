@@ -8,33 +8,56 @@ using Microsoft.AspNetCore.SignalR.Client;
 using ChatAppV3.Models;
 using System.Threading.Tasks;
 using ChatAppV3.HubClientCon;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace ChatAppV3.ViewModels
 {
-    class LoginVM : INotifyPropertyChanged
+    class LoginVM : HubConnClient ,INotifyPropertyChanged
     {
         public LoginVM()
         {
             IsError = false;
 
 
-            // hubConnection = new HubConnectionBuilder()
+            // hub = new hubBuilder()
             //   .WithUrl($"http://172.16.3.63:5565/chathub")
             // .Build();
-            HubConnClient hub = new HubConnClient();
-            hubConnection = hub.HubConn();
 
-            hubConnection.On<string[]>("ReceiveAccount", async (arr) =>
+
+            hub.On<string[]>("ReceiveAccount", async (arr) =>
             {
-                if (int.Parse(arr[4]) > 0)
+                
+                if (int.Parse(arr[3]) > 0)
                 {
 
-                    UserModel userModel = new UserModel();
-                    userModel.Name = arr[0];
-                    userModel.Email = arr[1];
-                    userModel.Password = arr[2];
-                    userModel.ConnectionID = arr[3];
-                    userModel.UserID = arr[4];
+                    UserModel user = new UserModel() 
+                    {
+                        Name = arr[0],
+                        Email = arr[1],
+                        Password = arr[2],
+                        UserID = arr[3]
+                        
+                        
+                    };
+
+                    //Serialize Object to json because the storage only takes primitive types
+                    var userJSON = JsonSerializer.Serialize<UserModel>(user);
+                    if (Application.Current.Properties.ContainsKey("UserData"))
+                    {
+                        Application.Current.Properties["UserData"] = userJSON;
+
+                    }
+                    else
+                    {
+                        //add key/pair to storage
+
+                        Application.Current.Properties.Add("UserData", userJSON);
+
+                    }
+                    //Save changes
+                    await Application.Current.SavePropertiesAsync();
+
 
                     FriendListVM viewModel = new FriendListVM();
 
@@ -48,14 +71,24 @@ namespace ChatAppV3.ViewModels
                 {
                     IsError = true;
                     ErrorMsg = "Email and/or Password are incorrect!";
-                    await hubConnection.StopAsync();
+                    await hub.StopAsync();
                 }
             });
 
             LoginCommand = new Command(async() =>
             {
-                await hubConnection.StartAsync();
-                await Login(Email, Password);
+                if(!string.IsNullOrWhiteSpace(Email) && !string.IsNullOrWhiteSpace(Password))
+                {
+                    await hub.StartAsync();
+                    await Login(Email, Password);
+                }
+                else
+                {
+                    IsError = true;
+                    ErrorMsg = "Email and/or Password are incorrect!";
+                    await hub.StopAsync();
+                }
+
             });
 
             RegisterCommand = new Command(async () =>
@@ -65,14 +98,14 @@ namespace ChatAppV3.ViewModels
                 RegisterPage registerPage = new RegisterPage();
 
                 registerPage.BindingContext = registerVM;
-                await hubConnection.StopAsync();
                 await Application.Current.MainPage.Navigation.PushModalAsync(registerPage);
+                await hub.StopAsync();
+
             });
         }
 
         private bool isError;
         private string errorMsg;
-        private HubConnection hubConnection; 
         public Command RegisterCommand { get; }
         public Command LoginCommand { get; set; }
         private string email;
@@ -125,7 +158,7 @@ namespace ChatAppV3.ViewModels
 
         async Task Login(string email, string password)
         {
-            await hubConnection.InvokeAsync("LogIn", email, password);
+            await hub.InvokeAsync("LogIn", email, password);
         }
 
 

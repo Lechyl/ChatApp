@@ -22,7 +22,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "nativeDebugging": false,
-      "applicationUrl": "https://172.16.3.63:5566;http://172.16.3.63:5565"
+      "applicationUrl": "https://172.16.3.53:5566;http://172.16.3.53:5565"
     }
   }
 }

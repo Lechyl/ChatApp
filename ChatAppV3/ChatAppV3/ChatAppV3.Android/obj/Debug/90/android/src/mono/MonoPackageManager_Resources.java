@@ -23,6 +23,7 @@ public class MonoPackageManager_Resources {
 		"Microsoft.Extensions.Logging.dll",
 		"Microsoft.Extensions.Options.dll",
 		"Microsoft.Extensions.Primitives.dll",
+		"Newtonsoft.Json.dll",
 		"System.IO.Pipelines.dll",
 		"System.Text.Encodings.Web.dll",
 		"System.Text.Json.dll",

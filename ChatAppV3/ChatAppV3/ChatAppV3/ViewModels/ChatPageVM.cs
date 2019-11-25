@@ -77,7 +77,7 @@ namespace ChatAppV3.ViewModels
             SendMessageCommand = new Command(async () => 
             { 
                 
-                await SendMessage(Name, Message);
+                //await SendMessage(groupName,Name, Message);
                 Message = string.Empty;
             });
 
@@ -147,10 +147,10 @@ namespace ChatAppV3.ViewModels
             IsConnected = true;
         }
 
-        async Task SendMessage(string user, string message)
+        async Task SendMessage(string groupName,string user, string message)
         {
             //Invoke/Raise hub method, It'll raise/run a specific method in the hub
-            await hubConnection.InvokeAsync("SendMessageAll", user, message);
+            await hubConnection.InvokeAsync("SendMsgToGroup", groupName ,user, message);
         }
 
         async Task Disconnect()
