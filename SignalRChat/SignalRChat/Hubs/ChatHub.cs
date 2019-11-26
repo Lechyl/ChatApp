@@ -20,7 +20,7 @@ namespace SignalRChat.Hubs
 
         };
 
-
+        
         //public UserModel Users = new UserModel();
         //public GroupModel GroupList = new GroupModel();
         //-------------------------------------------------------------------------------------------------- Test CHat Methods
@@ -59,7 +59,8 @@ namespace SignalRChat.Hubs
         public async Task MyGroupList(string userID)
         {
             await ReconnectUser(userID);
-            Console.WriteLine("real conn" + Context.ConnectionId);
+            
+            Console.WriteLine("real conn" + Context.User.Identity.Name);
             Console.WriteLine("Enter MyGroupList");
 
             // List<Tuple<string, List<string>>> tuples = new List<Tuple<string, List<string>>>();
@@ -90,43 +91,86 @@ namespace SignalRChat.Hubs
         }
 
         //Add player to group and/or create group and put yourself into the group
-        public async Task AddToGroup(string groupName, string userID)
+        public async Task AddToGroup(string groupName, string userID, string friendID = null)
         {
             await ReconnectUser(userID);
 
-            var user = users.Users.Find(u => u.UserID == userID);
             //  var group = users.Groups.Find(g => g.GroupName == groupName);
             //var usersInGroup = group.Users.ToList();
             DbGroups db = new DbGroups();
 
-            if (users.Groups.Exists(g => g.GroupName == groupName))
+            //Friend or Client
+            if(friendID == null)
             {
-                //user doesn't exist in group list
+                var user = users.Users.Find(u => u.UserID == userID);
 
-                if (!users.Groups.Exists(g => g.Users.Exists(u => u.UserID == userID)))
+                if (users.Groups.Exists(g => g.GroupName == groupName))
                 {
-                    //add user to group list
+                    //user doesn't exist in group list
+
+                    if (!users.Groups.Exists(g => g.Users.Exists(u => u.UserID == userID)))
+                    {
+                        //add user to group list
+                        users.Groups.Find(g => g.GroupName == groupName).Users.Add(user);
+
+                    }
+
+
+                }
+                else
+                {
+                    int groupID = await db.CreateGroup(groupName);
+                    users.Groups.Add(new GroupModel()
+                    {
+                        GroupName = groupName,
+                        GroupID = groupID.ToString(),
+                        Users = new List<UserModel>()
+
+                    });
                     users.Groups.Find(g => g.GroupName == groupName).Users.Add(user);
 
                 }
-
-
+                await db.AddUserToGroup(userID, users.Groups.Find(g => g.GroupName == groupName).GroupID);
+                await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
             }
             else
             {
-                int groupID = await db.CreateGroup(groupName);
-                users.Groups.Add(new GroupModel()
+                var user = users.Users.Find(u => u.UserID == friendID);
+
+                if (users.Groups.Exists(g => g.GroupName == groupName))
                 {
-                    GroupName = groupName,
-                    GroupID = groupID.ToString(),
-                    Users = new List<UserModel>()
+                    //user doesn't exist in group list
 
-                });
-                users.Groups.Find(g => g.GroupName == groupName).Users.Add(user);
+                    if (!users.Groups.Exists(g => g.Users.Exists(u => u.UserID == friendID)))
+                    {
+                        //add user to group list
+                        users.Groups.Find(g => g.GroupName == groupName).Users.Add(user);
 
+                    }
+
+
+                }
+                else
+                {
+                    int groupID = await db.CreateGroup(groupName);
+                    users.Groups.Add(new GroupModel()
+                    {
+                        GroupName = groupName,
+                        GroupID = groupID.ToString(),
+                        Users = new List<UserModel>()
+
+                    });
+                    users.Groups.Find(g => g.GroupName == groupName).Users.Add(user);
+
+                }
+                await db.AddUserToGroup(friendID, users.Groups.Find(g => g.GroupName == groupName).GroupID);
+                if (user.IsConnected)
+                {
+                    await Groups.AddToGroupAsync(user.ConnectionID, groupName);
+
+                }
             }
-            await db.AddUserToGroup(userID, users.Groups.Find(g => g.GroupName == groupName).GroupID);
-            await Groups.AddToGroupAsync(user.ConnectionID, groupName);
+
 
 
 
@@ -164,7 +208,16 @@ namespace SignalRChat.Hubs
                 stringUser[2] = user.Password;
                 stringUser[3] = user.UserID;
                 //add user to users list
-                users.Users.Add(user);
+                if(users.Users.Exists(u => u.UserID == user.UserID))
+                {
+                    users.Users.Find(u => u.UserID == user.UserID).IsConnected = true;
+
+                }
+                else
+                {
+                    users.Users.Add(user);
+                }
+
                 Console.WriteLine("done = " + users.Users.Find(u => u.UserID == user.UserID).Name);
 
             }
@@ -179,7 +232,7 @@ namespace SignalRChat.Hubs
         public void LogOut(string userID)
         {
             //remove user from user list
-            users.Users.RemoveAll(u => u.UserID == userID);
+            users.Users.Find(u => u.UserID == userID).IsConnected = false;
         }
 
         //-------------------------------------------------------------------------------------------------- Register Method
@@ -207,6 +260,7 @@ namespace SignalRChat.Hubs
         public async Task ReconnectUser(string userID)
         {
 
+
             //Console.WriteLine("cw = " + users.Users.Find(u => u.UserID == userID).Password);
             string cid = Context.ConnectionId;
             if (users.Users != null)
@@ -217,7 +271,13 @@ namespace SignalRChat.Hubs
                     users.Users.Find(u => u.UserID == userID).ConnectionID = cid;
 
                     Console.WriteLine("hey");
+                     //users.Groups.Where(g => g.Users.Exists(u => u.UserID == userID));
 
+                    //Reconnect to all subscripted Groups
+                    foreach(var item in users.Groups.Where(g => g.Users.Exists(u => u.UserID == userID)))
+                    {
+                        await Groups.AddToGroupAsync(cid, item.GroupName);
+                    }
                 }
             }
 

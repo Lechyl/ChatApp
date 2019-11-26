@@ -12,6 +12,7 @@ namespace SignalRChat.Models
         public string Password { get; set; }
         public string ConnectionID { get; set; }
         public string UserID { get; set; }
+        public bool IsConnected { get; set; }
         public List<FriendsModel> Friends { get; set; }
 
         public UserModel()

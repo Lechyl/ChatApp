@@ -26,39 +26,42 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
-                
+
             </Grid.RowDefinitions>
             <Button Grid.Row="2" Command="{Binding ReconnectCommand}" Text="Reconnect To App"/>
         </Grid>
-    <Grid IsVisible="{Binding Reconnect}">
-        <Grid IsVisible="{Binding ShowGroupList, Converter={StaticResource InserseBool}}">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Editor Grid.Row="0" Text="{Binding GroupName}" Placeholder="group name" />
-            <Label Text="This group already exist or the field is empty" IsVisible="{Binding Error}"/>
-            <Button Grid.Row="1" Text="Create Group" Command="{Binding AddGroupCommand}"/>
-            <Button Grid.Row="2" Text="Go Back" Command="{Binding ShowAddGroupCommand}"/>
-        </Grid>
-        <Grid IsVisible="{Binding ShowGroupList}">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Button Grid.Row="0" Text="  +  " Command="{Binding ShowAddGroupCommand}"/>
-                <ListView Grid.Row="1" Grid.RowSpan="2" ItemsSource="{Binding Groups}">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <StackLayout BackgroundColor="#eee"
+        <Grid IsVisible="{Binding Reconnect}">
+            <Grid IsVisible="{Binding ShowGroupList, Converter={StaticResource InserseBool}}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Editor Grid.Row="0" Text="{Binding GroupName}" Placeholder="group name" />
+                <Label Text="This group already exist or the field is empty" IsVisible="{Binding Error}"/>
+                <Button Grid.Row="1" Text="Create Group" Command="{Binding AddGroupCommand}"/>
+                <Button Grid.Row="2" Text="Go Back" Command="{Binding ShowAddGroupCommand}"/>
+            </Grid>
+            <Grid IsVisible="{Binding ShowGroupList}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Button Grid.Row="0" Text="  +  " Command="{Binding ShowAddGroupCommand}"/>
+                <ListView Grid.Row="1" Grid.RowSpan="2" ItemsSource="{Binding Groups}" SelectionMode="Single" ItemSelected="MyTappedItem" IsPullToRefreshEnabled="True" RefreshCommand="{Binding RefreshCommand}" IsRefreshing="{Binding IsRefreshed, Mode=OneWay}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <ViewCell.ContextActions>
+                                    <MenuItem Clicked="OnDelete" Text="Delete" IsDestructive="True"/>
+                                </ViewCell.ContextActions>
+                                <StackLayout BackgroundColor="#eee"
                         Orientation="Vertical">
-                                <StackLayout Orientation="Horizontal" HorizontalOptions="StartAndExpand" VerticalOptions="CenterAndExpand">
+                                    <StackLayout Orientation="Horizontal" HorizontalOptions="StartAndExpand" VerticalOptions="CenterAndExpand">
 
                                         <Label
                                             Margin="10"
@@ -68,13 +71,13 @@
                                             VerticalOptions="FillAndExpand" />
 
                                     </StackLayout>
-                            </StackLayout>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
+                                </StackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
                 </ListView>
                 <Button Grid.Row="3" Text="LogOut" Command="{Binding LogOutCommand}"/>
+            </Grid>
         </Grid>
-    </Grid>
     </Grid>
 </ContentPage>

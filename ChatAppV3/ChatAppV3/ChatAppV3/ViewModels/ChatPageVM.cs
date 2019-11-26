@@ -19,11 +19,21 @@ namespace ChatAppV3.ViewModels
         public Command ConnectCommand { get; }
         public Command DisconnectCommand { get; }
 
+        private string groupName;
         private string _name;
         private string _message;
         private ObservableCollection<MessageModel> _messages;
         private bool _isConnected;
 
+        public string GroupName
+        {
+            get => groupName;
+            set
+            {
+                groupName = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(GroupName)));
+            }
+        }
         public string Name
         {
             get
@@ -74,7 +84,7 @@ namespace ChatAppV3.ViewModels
             //Instantiate
             Messages = new ObservableCollection<MessageModel>();
 
-            SendMessageCommand = new Command(async () => 
+            SendMessageCommand = new Command( () => 
             { 
                 
                 //await SendMessage(groupName,Name, Message);

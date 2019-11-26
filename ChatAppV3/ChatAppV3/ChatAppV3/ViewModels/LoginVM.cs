@@ -59,19 +59,21 @@ namespace ChatAppV3.ViewModels
                     await Application.Current.SavePropertiesAsync();
 
 
-                    FriendListVM viewModel = new FriendListVM();
+                    //FriendListVM viewModel = new FriendListVM();
 
-                    FriendListPage page = new FriendListPage();
+                  //  FriendListPage page = new FriendListPage();
 
-                    page.BindingContext = viewModel;
+                   // page.BindingContext = viewModel;
 
-                    await Application.Current.MainPage.Navigation.PushModalAsync(page);
+                    await Application.Current.MainPage.Navigation.PushModalAsync(new FriendListPage(), false);
+
+                    // await Application.Current.MainPage.Navigation.PushModalAsync(page);
                 }
                 else
                 {
                     IsError = true;
                     ErrorMsg = "Email and/or Password are incorrect!";
-                    await hub.StopAsync();
+                    await DisconnectAsync();
                 }
             });
 
@@ -79,27 +81,27 @@ namespace ChatAppV3.ViewModels
             {
                 if(!string.IsNullOrWhiteSpace(Email) && !string.IsNullOrWhiteSpace(Password))
                 {
-                    await hub.StartAsync();
+                    await ConnectAsync();
                     await Login(Email, Password);
                 }
                 else
                 {
                     IsError = true;
                     ErrorMsg = "Email and/or Password are incorrect!";
-                    await hub.StopAsync();
+                    await DisconnectAsync();
                 }
 
             });
 
             RegisterCommand = new Command(async () =>
             {
-                RegisterVM registerVM = new RegisterVM();
+                //RegisterVM registerVM = new RegisterVM();
 
-                RegisterPage registerPage = new RegisterPage();
+                //RegisterPage registerPage = new RegisterPage();
 
-                registerPage.BindingContext = registerVM;
-                await Application.Current.MainPage.Navigation.PushModalAsync(registerPage);
-                await hub.StopAsync();
+                //registerPage.BindingContext = registerVM;
+                await Application.Current.MainPage.Navigation.PushModalAsync(new RegisterPage(), false);
+                await DisconnectAsync();
 
             });
         }

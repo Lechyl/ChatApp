@@ -14,6 +14,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
 
+
 namespace ChatAppV3.ViewModels
 {
 
@@ -24,21 +25,34 @@ namespace ChatAppV3.ViewModels
 
         public FriendListVM()
         {
-            GroupName += "D ";
+            
             StartOptions();
-
+            IsRefreshed = false;
             Reconnect = false;
             ShowGroupList = true;
             Error = false;
 
-            groups = new ObservableCollection<GroupListModel>();
-            GetFriendList(user.UserID);
+            Groups = new ObservableCollection<GroupListModel>();
+            //GetFriendList(user.UserID);
 
+            Task.Run(async () => {
+                await GetFriendList(user.UserID);
 
+            });
+
+            RefreshCommand = new Command(async () =>
+            {
+                IsRefreshed = true;
+
+                await GetFriendList(user.UserID);
+
+                IsRefreshed = false;
+
+            });
             ReconnectCommand = new Command(async () =>
             {
-
-                Reconnect = true;
+                await GoToChat();
+               // Reconnect = true;
 
             });
 
@@ -69,14 +83,17 @@ namespace ChatAppV3.ViewModels
             hub.On<List<string>>("ReceiveGroupList", (ls) => {
 
                 GroupName = "a";
+                Groups.Clear();
                 foreach (var item in ls)
                 {
-                    groups.Add(new GroupListModel() { groupName = item });
-                    GroupName += item;
+                     
+                    Groups.Add(new GroupListModel() { groupName = item });
+
+                    
                 }
                
                 /*foreach (var groupName in ls)
-                {
+                {hhh
                     groups.Add(groupName);
                 }*/
 
@@ -92,13 +109,15 @@ namespace ChatAppV3.ViewModels
 
         private bool error;
         private bool showGroupList;
-        private string groupName;
         private bool reconnect;
+        private bool isRefreshed;
+        private string groupName;
         public Command AddGroupCommand { get; }
         public Command ShowAddGroupCommand { get; }
         public Command LogOutCommand { get; }
-
+        public Command RefreshCommand { get; }
         public Command ReconnectCommand { get; }
+
         private ObservableCollection<GroupListModel> groups;
 
         public ObservableCollection<GroupListModel> Groups
@@ -111,6 +130,15 @@ namespace ChatAppV3.ViewModels
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Groups)));
             }
 
+        }
+        public bool IsRefreshed
+        {
+            get => isRefreshed;
+            set
+            {
+                isRefreshed = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs((nameof(IsRefreshed))));
+            }
         }
 
         public bool Reconnect
@@ -158,14 +186,16 @@ namespace ChatAppV3.ViewModels
         }
         public async Task GetFriendList(string userID)
         {
-            await hub.StartAsync();
+            await ConnectAsync();
             await hub.InvokeAsync("MyGroupList", userID);
+
+
         }
 
         public async Task AddGroupOrUserToGroup(string groupName,string userID)
         {
 
-            await hub.InvokeAsync("AddToGroup", groupName, userID);
+            await hub.InvokeAsync("AddToGroup", groupName, userID, null);
         }
         public void StartOptions()
         {
@@ -199,7 +229,7 @@ namespace ChatAppV3.ViewModels
             await _semaphore.WaitAsync();
             try
             {
-                await hub.StartAsync();
+                await ConnectAsync();
 
                 await hub.InvokeAsync("ReconnectUser", user.UserID);
                 GroupName += "A ";
@@ -218,13 +248,22 @@ namespace ChatAppV3.ViewModels
         {
             Application.Current.Properties.Clear();
             await Application.Current.SavePropertiesAsync();
-            LoginVM viewModel = new LoginVM();
+            /*LoginVM viewModel = new LoginVM();
             LoginPage page = new LoginPage();
 
-            page.BindingContext = viewModel;
+            page.BindingContext = viewModel;*/
 
-            await Application.Current.MainPage.Navigation.PushModalAsync(page);
-            await hub.StopAsync();
+            await Application.Current.MainPage.Navigation.PopModalAsync();
+            await DisconnectAsync();
+        }
+
+        public async Task GoToChat()
+        {
+            MainThread.BeginInvokeOnMainThread(async() => { 
+            await Application.Current.MainPage.Navigation.PushAsync(new ChatPage(), false);
+
+            });
+
         }
 
 

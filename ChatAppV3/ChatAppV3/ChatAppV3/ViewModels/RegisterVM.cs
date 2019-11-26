@@ -11,7 +11,7 @@ using Xamarin.Essentials;
 
 namespace ChatAppV3.ViewModels
 {
-    class RegisterVM : INotifyPropertyChanged
+    class RegisterVM : HubConnClient,INotifyPropertyChanged
     {
 
         public RegisterVM()
@@ -19,10 +19,10 @@ namespace ChatAppV3.ViewModels
             IsError = false;
             IsRedirect = false;
 
-            hubConnection = new HubConnectionBuilder()
+            /*hub = new hubBuilder()
                .WithUrl($"http://172.16.3.63:5565/chathub")
-             .Build();
-
+             .Build();*/
+            
 
             LoginCommand = new Command(async () =>
             {
@@ -49,14 +49,15 @@ namespace ChatAppV3.ViewModels
 
             });
 
-            hubConnection.On<bool>("ReceieveRegisterMsg", async (IsRegister) =>
+            hub.On<bool>("ReceieveRegisterMsg", async (IsRegister) =>
             {
                 if (IsRegister)
                 {
 
                     await Application.Current.MainPage.Navigation.PopModalAsync();
 
-                    await hubConnection.StopAsync();
+                    await DisconnectAsync();
+
 
                 }
                 else
@@ -65,14 +66,13 @@ namespace ChatAppV3.ViewModels
                     IsError = true;
                     ErrorMsg = "Something went wrong. Please try again or contact support";
 
-                    await hubConnection.StopAsync();
+                    await DisconnectAsync();
 
                 }
             });
         }
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private HubConnection hubConnection;
 
         private bool isRedirect;
         private bool isError;
@@ -148,9 +148,8 @@ namespace ChatAppV3.ViewModels
 
         public async Task RegisterUser(string name, string email, string password)
         {
-            await hubConnection.StartAsync();
-
-            await hubConnection.InvokeAsync("Register", name, email, password);
+            await ConnectAsync();
+            await hub.InvokeAsync("Register", name, email, password);
 
         }
 
