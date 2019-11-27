@@ -30,7 +30,7 @@
             FontSize="20"
             HorizontalOptions="FillAndExpand"
             HorizontalTextAlignment="Start"
-            Text="CHAT"
+            Text="{Binding GroupName}"
             TextColor="White" />
         <Label
             Margin="10"
@@ -166,35 +166,7 @@
                 VerticalOptions="FillAndExpand" />
         </Grid>
            <!-- if I'm not connected yet-->
-        <Grid
-            Grid.RowSpan="3"
-            BackgroundColor="#99FFFFFF"
-            IsVisible="{Binding IsConnected, Converter={StaticResource InverseBool}}">
-            <StackLayout
-                Margin="20,40"
-                BackgroundColor="White"
-                HorizontalOptions="Center"
-                VerticalOptions="Center">
-                <Label
-                    HorizontalOptions="Center"
-                    Text="Your chat name:"
-                    TextColor="Black"
-                    VerticalOptions="Center" />
-                <Entry
-                    BackgroundColor="#f5f9fa"
-                    Placeholder="Name"
-                    PlaceholderColor="#969daf"
-                    Text="{Binding Name}"
-                    WidthRequest="150" />
-                <Button
-                    Grid.Column="1"
-                    BackgroundColor="#2ac2c5"
-                    Command="{Binding ConnectCommand}"
-                    HorizontalOptions="FillAndExpand"
-                    Text="Connect"
-                    VerticalOptions="FillAndExpand" />
-            </StackLayout>
-        </Grid>
+
     </Grid>
 
 </ContentPage>

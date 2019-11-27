@@ -40,6 +40,12 @@ namespace ChatAppV3.ViewModels
 
             });
 
+            ChatRoomCommand = new Command(async () => {
+                // await GoToChat();
+                await Application.Current.MainPage.Navigation.PushAsync(new ChatPage(), false);
+
+            });
+
             RefreshCommand = new Command(async () =>
             {
                 IsRefreshed = true;
@@ -51,8 +57,8 @@ namespace ChatAppV3.ViewModels
             });
             ReconnectCommand = new Command(async () =>
             {
-                await GoToChat();
-               // Reconnect = true;
+               // await GoToChat();
+                Reconnect = true;
 
             });
 
@@ -69,9 +75,10 @@ namespace ChatAppV3.ViewModels
                 }
             });
 
-            ShowAddGroupCommand = new Command( () =>
+            ShowAddGroupCommand = new Command(async () =>
             {
                 //GroupName = user.Email + user.ConnectionID;
+                await GetFriendList(user.UserID);
                 ShowGroupList = !ShowGroupList;
             });
 
@@ -80,14 +87,23 @@ namespace ChatAppV3.ViewModels
                 await LogOut();
             });
 
-            hub.On<List<string>>("ReceiveGroupList", (ls) => {
+            hub.On<List<GroupListModel>>("ReceiveGroupList", (ls) => {
 
                 GroupName = "a";
                 Groups.Clear();
+
+                if (ls.Count > 0)
+                {
+                    GroupName = "s";
+                }
+                else
+                {
+                    GroupName = "g";
+                }
                 foreach (var item in ls)
                 {
-                     
-                    Groups.Add(new GroupListModel() { groupName = item });
+                    GroupName += item.groupName;
+                    Groups.Add(new GroupListModel() { groupName = item.groupName, groupID = item.groupID });
 
                     
                 }
@@ -117,7 +133,7 @@ namespace ChatAppV3.ViewModels
         public Command LogOutCommand { get; }
         public Command RefreshCommand { get; }
         public Command ReconnectCommand { get; }
-
+        public Command ChatRoomCommand { get; }
         private ObservableCollection<GroupListModel> groups;
 
         public ObservableCollection<GroupListModel> Groups
@@ -195,7 +211,7 @@ namespace ChatAppV3.ViewModels
         public async Task AddGroupOrUserToGroup(string groupName,string userID)
         {
 
-            await hub.InvokeAsync("AddToGroup", groupName, userID, null);
+            await hub.InvokeAsync("AddToGroup", groupName, userID,null, null);
         }
         public void StartOptions()
         {
@@ -257,15 +273,8 @@ namespace ChatAppV3.ViewModels
             await DisconnectAsync();
         }
 
-        public async Task GoToChat()
-        {
-            MainThread.BeginInvokeOnMainThread(async() => { 
-            await Application.Current.MainPage.Navigation.PushAsync(new ChatPage(), false);
-
-            });
-
-        }
 
 
+       
     }
 }

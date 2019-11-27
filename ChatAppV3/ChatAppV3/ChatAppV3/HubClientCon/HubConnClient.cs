@@ -14,7 +14,7 @@ namespace ChatAppV3.HubClientCon
         {
             IsConnected = false;
             hub = new HubConnectionBuilder()
-                .WithUrl($"http://172.16.3.49:5565/chathub")
+                .WithUrl($"http://172.16.3.63:5565/chathub")
                     .WithAutomaticReconnect()
                         .Build();
             hub.Closed += async (error) =>

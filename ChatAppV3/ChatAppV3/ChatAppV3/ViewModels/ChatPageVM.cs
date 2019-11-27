@@ -6,24 +6,101 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using ChatAppV3.Models;
+using System.Text.Json;
+using ChatAppV3.HubClientCon;
+using System.Collections.Generic;
 
 namespace ChatAppV3.ViewModels
 {
-    class ChatPageVM : INotifyPropertyChanged
+    class ChatPageVM :  HubConnClient,INotifyPropertyChanged
     {
+
+
+        public ChatPageVM()
+        {
+            //Instantiate
+            StartOptions();
+
+            Messages = new ObservableCollection<MessageModel>();
+
+            Task.Run(async () => {
+                await Connect();
+            });
+
+            SendMessageCommand = new Command(async () =>
+            {
+
+                await SendMessage(currentGroup.groupID, Message, Name, user.UserID);
+                Message = string.Empty;
+            });
+
+
+
+            DisconnectCommand = new Command(async () =>
+            {
+                await Disconnect();
+                await Application.Current.MainPage.Navigation.PopModalAsync();
+            });
+
+
+
+
+            //Listening to the hub with specific method
+            hub.On<string>("JoinChat" + currentGroup.groupID, (user) =>
+            {
+                //Add a message to the Message collection
+                Messages.Add(new MessageModel()
+                {
+                    User = Name,
+                    Message = $"{user} has joined the chat",
+                    IsSystemMessage = true
+                });
+            });
+
+            hub.On<string>("LeaveChat" + currentGroup.groupID, (user) =>
+            {
+                //Add a message to the Message collection
+                Messages.Add(new MessageModel()
+                {
+                    User = Name,
+                    Message = $"{user} has left the chat",
+                    IsSystemMessage = true
+                });
+            });
+
+            hub.On<string, string>("ReceiveMessage"+ currentGroup.groupID, (user, message) =>
+            {
+                //Add a message to the Message collection
+                Messages.Add(new MessageModel()
+                {
+                    User = user,
+                    Message = message,
+                    IsSystemMessage = false,
+                    IsOwnMessage = Name == user
+                });
+            });
+
+            hub.On<List<MessageModel>>("ReceivedDBMessages" + currentGroup.groupID, (ls) => 
+            { 
+            
+            });
+
+        }
+
+
         //Create Fields
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private HubConnection hubConnection;
         public Command SendMessageCommand { get; }
-        public Command ConnectCommand { get; }
         public Command DisconnectCommand { get; }
 
+        private GroupListModel currentGroup;
+        private UserModel user;
         private string groupName;
         private string _name;
         private string _message;
         private ObservableCollection<MessageModel> _messages;
-        private bool _isConnected;
+
 
         public string GroupName
         {
@@ -31,7 +108,7 @@ namespace ChatAppV3.ViewModels
             set
             {
                 groupName = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(GroupName)));
+                OnPropertyChanged();
             }
         }
         public string Name
@@ -46,7 +123,6 @@ namespace ChatAppV3.ViewModels
                 OnPropertyChanged();
             }
         }
-
 
         public string Message
         {
@@ -67,112 +143,35 @@ namespace ChatAppV3.ViewModels
                 OnPropertyChanged();
             }
         }
-        public bool IsConnected
-        {
-            get => _isConnected;
-            set
-            {
-                _isConnected = value;
-                OnPropertyChanged();
-            }
-        }
 
 
 
-        public ChatPageVM()
-        {
-            //Instantiate
-            Messages = new ObservableCollection<MessageModel>();
-
-            SendMessageCommand = new Command( () => 
-            { 
-                
-                //await SendMessage(groupName,Name, Message);
-                Message = string.Empty;
-            });
-
-            ConnectCommand = new Command(async () => 
-            {
-                await Connect();
-            });
-
-            DisconnectCommand = new Command(async () =>
-            {
-                await Disconnect();
-            });
-
-            IsConnected = false;
-
-            hubConnection = new HubConnectionBuilder()
-         .WithUrl($"http://10.142.69.153:5565/chathub")
-         .Build();
-
-
-            //Listening to the hub with specific method
-            hubConnection.On<string>("JoinChat", (user) =>
-            {
-                //Add a message to the Message collection
-                Messages.Add(new MessageModel() 
-                { 
-                    User = Name, 
-                    Message = $"{user} has joined the chat",
-                    IsSystemMessage = true 
-                });
-            });
-
-            hubConnection.On<string>("LeaveChat", (user) =>
-            {
-                //Add a message to the Message collection
-                Messages.Add(new MessageModel() 
-                { 
-                    User = Name, 
-                    Message = $"{user} has left the chat", 
-                    IsSystemMessage = true 
-                });
-            });
-
-            hubConnection.On<string, string>("ReceiveMessage", (user, message) =>
-            {
-                //Add a message to the Message collection
-                Messages.Add(new MessageModel() 
-                { 
-                    User = user,
-                    Message = message, 
-                    IsSystemMessage = false, 
-                    IsOwnMessage = Name == user 
-                });
-            });
-
-
-        }
+        
 
         //Send data to the hub
         async Task Connect()
         {
             //Start Connection to the hub
-
+            await ConnectAsync();
             //Invoke/Raise hub method, It'll raise/run a specific method in the hub
-            await hubConnection.InvokeAsync("JoinChat", Name);
+            await hub.InvokeAsync("JoinChat", Name,user.UserID, currentGroup.groupID);
             
-            IsConnected = true;
         }
 
-        async Task SendMessage(string groupName,string user, string message)
+        async Task SendMessage(string groupID,string message, string user, string userID)
         {
             //Invoke/Raise hub method, It'll raise/run a specific method in the hub
-            await hubConnection.InvokeAsync("SendMsgToGroup", groupName ,user, message);
+            await hub.InvokeAsync("SendMsgToGroup", groupID, message, user, userID );
         }
 
         async Task Disconnect()
         {
             //Invoke/Raise hub method, It'll raise/run a specific method in the hub
-            await hubConnection.InvokeAsync("LeaveChat", Name);
+            await hub.InvokeAsync("LeaveChat", Name,user.UserID,currentGroup.groupID);
 
             //Stop  Connection to the hub
-            await hubConnection.StopAsync();
 
             //trigger IsConnected event, to disable display to chat
-            IsConnected = false;
         }
 
         protected virtual void OnPropertyChanged([CallerMemberName]string propertyName = "")
@@ -183,6 +182,39 @@ namespace ChatAppV3.ViewModels
             //if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        public void StartOptions()
+        {
 
+
+            if (Application.Current.Properties.ContainsKey("UserData"))
+            {
+                var userJson = Application.Current.Properties["UserData"];
+                var userDes = JsonSerializer.Deserialize<UserModel>(userJson.ToString());
+
+                user = new UserModel()
+                {
+                    Name = userDes.Name,
+                    Email = userDes.Email,
+                    Password = userDes.Password,
+                    UserID = userDes.UserID
+                };
+                Name = user.Name;
+
+
+                var groupJson = Application.Current.Properties["CurrentGroup"];
+                var groupDes = JsonSerializer.Deserialize<GroupListModel>(groupJson.ToString());
+
+                currentGroup = new GroupListModel()
+                {
+                    groupName = groupDes.groupName,
+                    groupID = groupDes.groupID
+                };
+                GroupName = currentGroup.groupName;
+
+            }
+
+
+
+        }
     }
 }

@@ -9,13 +9,12 @@ using System.Threading.Tasks;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using Xamarin.Essentials;
+using System.Text.Json;
 
 namespace ChatAppV3.Views
 {
-    public class GroupNameClass
-    {
-        public string Name { get; set; }
-    }
+
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class FriendListPage : ContentPage
     {
@@ -34,10 +33,32 @@ namespace ChatAppV3.Views
             //var d = e.Item as GroupNameClass;
 
             // ChatPageVM viewModel = new ChatPageVM();
-            //ChatPage page = new ChatPage();
-            //page.BindingContext = viewModel;
-            await DisplayAlert("helllo","Hello","ok");
+           // ChatPage page = new ChatPage();
+           // page.BindingContext = viewModel;
+           // await DisplayAlert("helllo","Hello","ok");
+            var selectedItem = e.Item as GroupListModel;
 
+            //MainThread.BeginInvokeOnMainThread(async () => {
+            //MessagingCenter.Send<FriendListPage, string>(this, "CurrentGroup", d);
+            GroupListModel group = new GroupListModel() { 
+                groupName = selectedItem.groupName,
+                groupID = selectedItem.groupID
+            };
+            await DisplayAlert("msg", group.groupName + group.groupID, "ok");
+            var json = JsonSerializer.Serialize<GroupListModel>(group);
+            if (!Application.Current.Properties.ContainsKey("CurrentGroup"))
+            {
+                
+                Application.Current.Properties.Add("CurrentGroup", json);
+
+            }
+            else
+            {
+                Application.Current.Properties["CurrentGroup"] = json;
+            }
+            await Navigation.PushModalAsync(new ChatPage(),false); 
+
+            //});
         }
 
         private void OnDelete(object sender, EventArgs e)

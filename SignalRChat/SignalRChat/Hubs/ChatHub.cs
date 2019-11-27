@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using SignalRChat.Database;
 using SignalRChat.Models;
+using System.Text.Json;
 
 namespace SignalRChat.Hubs
 {
@@ -23,20 +24,57 @@ namespace SignalRChat.Hubs
         
         //public UserModel Users = new UserModel();
         //public GroupModel GroupList = new GroupModel();
-        //-------------------------------------------------------------------------------------------------- Test CHat Methods
-        public async Task JoinChat(string user, string groupName)
+        //--------------------------------------------------------------------------------------------------  CHat Methods
+        public async Task JoinChat(string user,string userID, string groupID)
         {
-            await Clients.Group(groupName).SendAsync("JoinChat", user);
+            await ReconnectUser(userID);
+            Console.WriteLine("Connectiong to Chat" + groupID);
+            await Clients.Group(groupID).SendAsync("JoinChat" + groupID, user);
         }
 
-        public async Task LeaveChat(string user, string groupName)
+        public async Task LeaveChat(string user,string userID, string groupID)
         {
-            await Clients.Group(groupName).SendAsync("LeaveChat", user);
+            await ReconnectUser(userID);
+            Console.WriteLine("Leaving Chat");
+            await Clients.Group(groupID).SendAsync("LeaveChat" + groupID, user);
         }
-        public async Task SendMessageAll(string user, string message)
+        public async Task SendMsgToGroup(string groupID, string message, string user, string userID)
         {
-            await Clients.All.SendAsync("ReceiveMessage", user, message);
+            await ReconnectUser(userID);
+            if (users.Groups.Exists(g => g.GroupID == groupID))
+            {
+                var group = users.Groups.Find(g => g.GroupID == groupID);
+                if (group.Users.Exists(u => u.UserID == userID))
+                {
+                    DbSendMessage db = new DbSendMessage();
+                    await db.SendMessage(message, userID, groupID);
+                    string method = "ReceiveMessage" + groupID;
+                    await Clients.Group(groupID).SendAsync(method, user, message);
+                    Console.WriteLine(method);
+                }
+
+            }
         }
+
+        //-------------------------------------------------------------------------------------------------- GET Friendlist messages
+
+        public async Task GetMessages(string userID, string groupID)
+        {
+            DbSendMessage db = new DbSendMessage();
+            if(users.Groups.Exists(g => g.GroupID == groupID))
+            {
+                var group = users.Groups.Find(g => g.GroupID == groupID);
+
+                if(group.Users.Exists(u => u.UserID == userID && u.IsConnected == true))
+                {
+                    var messages = db.GetTop100Messages(groupID,userID);
+                    await Clients.Group(groupID).SendAsync("ReceiveDBMessages"+groupID,messages);
+                }
+            }
+
+        }
+
+
 
         //-------------------------------------------------------------------------------------------------- Single Chat Methods
         /* public async Task SendMessageClient(string user, string message, string toUserID)
@@ -64,15 +102,15 @@ namespace SignalRChat.Hubs
             Console.WriteLine("Enter MyGroupList");
 
             // List<Tuple<string, List<string>>> tuples = new List<Tuple<string, List<string>>>();
-            List<string> ls = new List<string>();
+            List<ClientGroupModel> ls = new List<ClientGroupModel>();
 
                 users.Groups.ForEach(g => {
 
-                    if (g.Users.Exists(u => u.UserID == userID))
+                    if (g.Users.Exists(u => u.UserID == userID && u.IsConnected == true))
                     {
 
                         Console.WriteLine("Group " +g.GroupName);
-                        ls.Add(g.GroupName);
+                        ls.Add(new ClientGroupModel() {  GroupName = g.GroupName, GroupID = g.GroupID});
                        
 
                     }
@@ -85,13 +123,17 @@ namespace SignalRChat.Hubs
             }*/
             string cid = Context.ConnectionId;
                 Console.WriteLine("send");
-                await Clients.Client(cid).SendAsync("ReceiveGroupList", ls);
+
+            
+            var userDes = JsonSerializer.Serialize<List<ClientGroupModel>>(ls);
+
+            await Clients.Client(cid).SendAsync("ReceiveGroupList", ls);
             
 
         }
 
         //Add player to group and/or create group and put yourself into the group
-        public async Task AddToGroup(string groupName, string userID, string friendID = null)
+        public async Task AddToGroup(string groupName, string userID,string groupID = null, string friendID = null)
         {
             await ReconnectUser(userID);
 
@@ -100,18 +142,26 @@ namespace SignalRChat.Hubs
             DbGroups db = new DbGroups();
 
             //Friend or Client
+            if(users.Users.Exists(u => u.IsConnected == true))
+            {
+
             if(friendID == null)
             {
                 var user = users.Users.Find(u => u.UserID == userID);
-
-                if (users.Groups.Exists(g => g.GroupName == groupName))
+                //If you're searching for a group
+                if (groupID != null)
                 {
                     //user doesn't exist in group list
 
-                    if (!users.Groups.Exists(g => g.Users.Exists(u => u.UserID == userID)))
+                    if (!users.Groups.Exists(g => g.GroupID == groupID))
                     {
                         //add user to group list
-                        users.Groups.Find(g => g.GroupName == groupName).Users.Add(user);
+                        var group = users.Groups.Find(g => g.GroupID == groupID);
+                        if(group.Users.Exists(u => u.UserID == userID))
+                        {
+                            users.Groups.Find(g => g.GroupID == groupID).Users.Add(user);
+
+                        }
 
                     }
 
@@ -119,32 +169,38 @@ namespace SignalRChat.Hubs
                 }
                 else
                 {
-                    int groupID = await db.CreateGroup(groupName);
+                    int newGroupID = await db.CreateGroup(groupName);
                     users.Groups.Add(new GroupModel()
                     {
                         GroupName = groupName,
-                        GroupID = groupID.ToString(),
+                        GroupID = newGroupID.ToString(),
                         Users = new List<UserModel>()
 
                     });
-                    users.Groups.Find(g => g.GroupName == groupName).Users.Add(user);
+                    groupID = newGroupID.ToString();
+                    users.Groups.Find(g => g.GroupID == groupID).Users.Add(user);
 
                 }
-                await db.AddUserToGroup(userID, users.Groups.Find(g => g.GroupName == groupName).GroupID);
-                await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
+                await db.AddUserToGroup(userID, groupID);
+                await Groups.AddToGroupAsync(Context.ConnectionId, groupID);
             }
             else
             {
-                var user = users.Users.Find(u => u.UserID == friendID);
+                var friendUser = users.Users.Find(u => u.UserID == friendID);
 
-                if (users.Groups.Exists(g => g.GroupName == groupName))
+                if (users.Groups.Exists(g => g.GroupID == groupID))
                 {
                     //user doesn't exist in group list
 
-                    if (!users.Groups.Exists(g => g.Users.Exists(u => u.UserID == friendID)))
+                    if (!users.Groups.Exists(g => g.GroupID == groupID))
                     {
+                        var group = users.Groups.Find(g => g.GroupID == groupID);
+                        if (group.Users.Exists(u => u.UserID == friendID))
+                        {
+                            users.Groups.Find(g => g.GroupID == groupID).Users.Add(friendUser);
+
+                        }
                         //add user to group list
-                        users.Groups.Find(g => g.GroupName == groupName).Users.Add(user);
 
                     }
 
@@ -152,7 +208,7 @@ namespace SignalRChat.Hubs
                 }
                 else
                 {
-                    int groupID = await db.CreateGroup(groupName);
+                    int newGroupID = await db.CreateGroup(groupName);
                     users.Groups.Add(new GroupModel()
                     {
                         GroupName = groupName,
@@ -160,28 +216,23 @@ namespace SignalRChat.Hubs
                         Users = new List<UserModel>()
 
                     });
-                    users.Groups.Find(g => g.GroupName == groupName).Users.Add(user);
+                    groupID = newGroupID.ToString();
+                    users.Groups.Find(g => g.GroupID == groupID).Users.Add(friendUser);
 
                 }
-                await db.AddUserToGroup(friendID, users.Groups.Find(g => g.GroupName == groupName).GroupID);
-                if (user.IsConnected)
+                await db.AddUserToGroup(friendID, groupID);
+                if (friendUser.IsConnected)
                 {
-                    await Groups.AddToGroupAsync(user.ConnectionID, groupName);
+                    await Groups.AddToGroupAsync(friendUser.ConnectionID, groupID);
 
                 }
+                }
+
             }
 
-
-
-
         }
 
-        public async Task SendMsgToGroup(string groupName, string message, string user)
-        {
-           
 
-            await Clients.Group(groupName).SendAsync("ReceiveMessage", user, message);
-        }
 
         //-------------------------------------------------------------------------------------------------- Log in and Log Out Methods
         public async Task LogIn(string email, string password)
@@ -254,7 +305,6 @@ namespace SignalRChat.Hubs
 
         }
 
-        //-------------------------------------------------------------------------------------------------- FriendList
 
         //-------------------------------------------------------------------------------------------------- Reconnect
         public async Task ReconnectUser(string userID)
@@ -276,7 +326,7 @@ namespace SignalRChat.Hubs
                     //Reconnect to all subscripted Groups
                     foreach(var item in users.Groups.Where(g => g.Users.Exists(u => u.UserID == userID)))
                     {
-                        await Groups.AddToGroupAsync(cid, item.GroupName);
+                        await Groups.AddToGroupAsync(cid, item.GroupID);
                     }
                 }
             }

@@ -52,26 +52,28 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <Button Grid.Row="0" Text="  +  " Command="{Binding ShowAddGroupCommand}"/>
-                <ListView Grid.Row="1" Grid.RowSpan="2" ItemsSource="{Binding Groups}" SelectionMode="Single" ItemSelected="MyTappedItem" IsPullToRefreshEnabled="True" RefreshCommand="{Binding RefreshCommand}" IsRefreshing="{Binding IsRefreshed, Mode=OneWay}">
+                <ListView Grid.Row="1" Grid.RowSpan="2" ItemsSource="{Binding Groups}" SelectionMode="Single" ItemTapped="MyTappedItem" IsPullToRefreshEnabled="True" RefreshCommand="{Binding RefreshCommand}" IsRefreshing="{Binding IsRefreshed, Mode=OneWay}">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
-                                <ViewCell.ContextActions>
-                                    <MenuItem Clicked="OnDelete" Text="Delete" IsDestructive="True"/>
-                                </ViewCell.ContextActions>
-                                <StackLayout BackgroundColor="#eee"
+                                <Grid>
+
+                                    <StackLayout BackgroundColor="#eee"
                         Orientation="Vertical">
                                     <StackLayout Orientation="Horizontal" HorizontalOptions="StartAndExpand" VerticalOptions="CenterAndExpand">
 
-                                        <Label
+                                            <Label
                                             Margin="10"
                                             LineBreakMode="CharacterWrap"
                                             Text="{Binding groupName}"
                                             TextColor="Black"
-                                            VerticalOptions="FillAndExpand" />
+                                            VerticalOptions="FillAndExpand" >
+                                            </Label>
+                                            <Label Text="{Binding groupID}" IsVisible="False"/>
 
-                                    </StackLayout>
+                                        </StackLayout>
                                 </StackLayout>
+                                </Grid>
                             </ViewCell>
                         </DataTemplate>
                     </ListView.ItemTemplate>
