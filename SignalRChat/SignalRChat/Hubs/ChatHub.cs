@@ -76,7 +76,7 @@ namespace SignalRChat.Hubs
                 if (group.Users.Exists(u => u.UserID == userID && u.IsConnected == true))
                 {
                     Console.WriteLine("Getting messages from DB");
-                    var messages = db.GetTop100Messages(groupID, userID);
+                    List<ClientMessage> messages = db.GetTop100Messages(groupID, userID);
                     await Clients.Group(groupID).SendAsync("ReceiveDBMessages" + groupID, messages);
                 }
             }
