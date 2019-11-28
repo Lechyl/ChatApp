@@ -7,5 +7,6 @@ namespace ChatAppV3.Models
     class FriendsModel
     {
         public string Name { get; set; }
+        public string FriendID { get; set; }
     }
 }

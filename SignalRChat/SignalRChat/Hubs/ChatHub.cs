@@ -7,32 +7,35 @@ using SignalRChat.Database;
 using SignalRChat.Models;
 using System.Text.Json;
 
+
 namespace SignalRChat.Hubs
 {
     public class ChatHub : Hub
     {
-        static List<UserModel> userlist = new List<UserModel>();
+        Program program = new Program();
+
+        /*static List<UserModel> userlist = new List<UserModel>();
         static List<GroupModel> groups = new List<GroupModel>();
-        public UserContext users = new UserContext()
+        public static UserContext users = new UserContext()
         {
             Users = userlist,
             Groups = groups
 
 
-        };
+        };*/
 
-        
+
         //public UserModel Users = new UserModel();
         //public GroupModel GroupList = new GroupModel();
         //--------------------------------------------------------------------------------------------------  CHat Methods
-        public async Task JoinChat(string user,string userID, string groupID)
+        public async Task JoinChat(string user, string userID, string groupID)
         {
             await ReconnectUser(userID);
             Console.WriteLine("Connectiong to Chat" + groupID);
             await Clients.Group(groupID).SendAsync("JoinChat" + groupID, user);
         }
 
-        public async Task LeaveChat(string user,string userID, string groupID)
+        public async Task LeaveChat(string user, string userID, string groupID)
         {
             await ReconnectUser(userID);
             Console.WriteLine("Leaving Chat");
@@ -41,9 +44,9 @@ namespace SignalRChat.Hubs
         public async Task SendMsgToGroup(string groupID, string message, string user, string userID)
         {
             await ReconnectUser(userID);
-            if (users.Groups.Exists(g => g.GroupID == groupID))
+            if (program.users.Groups.Exists(g => g.GroupID == groupID))
             {
-                var group = users.Groups.Find(g => g.GroupID == groupID);
+                var group = program.users.Groups.Find(g => g.GroupID == groupID);
                 if (group.Users.Exists(u => u.UserID == userID))
                 {
                     DbSendMessage db = new DbSendMessage();
@@ -61,14 +64,20 @@ namespace SignalRChat.Hubs
         public async Task GetMessages(string userID, string groupID)
         {
             DbSendMessage db = new DbSendMessage();
-            if(users.Groups.Exists(g => g.GroupID == groupID))
+            if (program.users.Groups.Exists(g => g.GroupID == groupID))
             {
-                var group = users.Groups.Find(g => g.GroupID == groupID);
+                Console.WriteLine("Found Group fo Messages");
+                var group = program.users.Groups.Find(g => g.GroupID == groupID);
 
-                if(group.Users.Exists(u => u.UserID == userID && u.IsConnected == true))
+                foreach (var item in group.Users)
                 {
-                    var messages = db.GetTop100Messages(groupID,userID);
-                    await Clients.Group(groupID).SendAsync("ReceiveDBMessages"+groupID,messages);
+                    Console.WriteLine("user in group ="+item.UserID + " connected = "+item.IsConnected.ToString());
+                }
+                if (group.Users.Exists(u => u.UserID == userID && u.IsConnected == true))
+                {
+                    Console.WriteLine("Getting messages from DB");
+                    var messages = db.GetTop100Messages(groupID, userID);
+                    await Clients.Group(groupID).SendAsync("ReceiveDBMessages" + groupID, messages);
                 }
             }
 
@@ -97,24 +106,24 @@ namespace SignalRChat.Hubs
         public async Task MyGroupList(string userID)
         {
             await ReconnectUser(userID);
-            
+
             Console.WriteLine("real conn" + Context.User.Identity.Name);
-            Console.WriteLine("Enter MyGroupList");
 
             // List<Tuple<string, List<string>>> tuples = new List<Tuple<string, List<string>>>();
             List<ClientGroupModel> ls = new List<ClientGroupModel>();
 
-                users.Groups.ForEach(g => {
+            if (program.users.Users.Exists(u => u.UserID == userID && u.IsConnected == true))
+            {
+            Console.WriteLine("Enter MyGroupList");
 
-                    if (g.Users.Exists(u => u.UserID == userID && u.IsConnected == true))
-                    {
 
-                        Console.WriteLine("Group " +g.GroupName);
-                        ls.Add(new ClientGroupModel() {  GroupName = g.GroupName, GroupID = g.GroupID});
-                       
+                foreach (var item in program.users.Groups.Where(g => g.Users.Exists(u => u.UserID == userID)))
+                {
+                    Console.WriteLine("Group " + item.GroupName);
+                    ls.Add(new ClientGroupModel() { GroupName = item.GroupName, GroupID = item.GroupID });
+                }
+            }
 
-                    }
-                });
             /*
             List<string> ls = new List<string>();
             foreach(var item in groups)
@@ -122,110 +131,110 @@ namespace SignalRChat.Hubs
                 ls.Add(item.GroupName);
             }*/
             string cid = Context.ConnectionId;
-                Console.WriteLine("send");
+            Console.WriteLine("send");
 
-            
+
             var userDes = JsonSerializer.Serialize<List<ClientGroupModel>>(ls);
 
             await Clients.Client(cid).SendAsync("ReceiveGroupList", ls);
-            
+
 
         }
 
         //Add player to group and/or create group and put yourself into the group
-        public async Task AddToGroup(string groupName, string userID,string groupID = null, string friendID = null)
+        public async Task AddToGroup(string groupName, string userID, string groupID = null, string friendID = null)
         {
             await ReconnectUser(userID);
 
-            //  var group = users.Groups.Find(g => g.GroupName == groupName);
+            //  var group = program.users.Groups.Find(g => g.GroupName == groupName);
             //var usersInGroup = group.Users.ToList();
             DbGroups db = new DbGroups();
 
             //Friend or Client
-            if(users.Users.Exists(u => u.IsConnected == true))
+            if (program.users.Users.Exists(u => u.IsConnected == true && u.UserID == userID))
             {
-
-            if(friendID == null)
-            {
-                var user = users.Users.Find(u => u.UserID == userID);
-                //If you're searching for a group
-                if (groupID != null)
+                Console.WriteLine("c");
+                if (friendID == null)
                 {
-                    //user doesn't exist in group list
-
-                    if (!users.Groups.Exists(g => g.GroupID == groupID))
+                    var user = program.users.Users.Find(u => u.UserID == userID);
+                    //If you're searching for a group
+                    if (groupID != null)
                     {
-                        //add user to group list
-                        var group = users.Groups.Find(g => g.GroupID == groupID);
-                        if(group.Users.Exists(u => u.UserID == userID))
+                        //user doesn't exist in group list
+
+                        if (!program.users.Groups.Exists(g => g.GroupID == groupID))
                         {
-                            users.Groups.Find(g => g.GroupID == groupID).Users.Add(user);
+                            //add user to group list
+                            var group = program.users.Groups.Find(g => g.GroupID == groupID);
+                            if (group.Users.Exists(u => u.UserID == userID))
+                            {
+                                program.users.Groups.Find(g => g.GroupID == groupID).Users.Add(user);
+
+                            }
 
                         }
 
+
                     }
+                    else
+                    {
+                        int newGroupID = await db.CreateGroup(groupName);
+                        program.users.Groups.Add(new GroupModel()
+                        {
+                            GroupName = groupName,
+                            GroupID = newGroupID.ToString(),
+                            Users = new List<UserModel>()
 
+                        });
+                        groupID = newGroupID.ToString();
+                        program.users.Groups.Find(g => g.GroupID == groupID).Users.Add(user);
 
+                    }
+                    await db.AddUserToGroup(userID, groupID);
+                    await Groups.AddToGroupAsync(Context.ConnectionId, groupID);
                 }
                 else
                 {
-                    int newGroupID = await db.CreateGroup(groupName);
-                    users.Groups.Add(new GroupModel()
+                    var friendUser = program.users.Users.Find(u => u.UserID == friendID);
+
+                    if (program.users.Groups.Exists(g => g.GroupID == groupID))
                     {
-                        GroupName = groupName,
-                        GroupID = newGroupID.ToString(),
-                        Users = new List<UserModel>()
+                        //user doesn't exist in group list
 
-                    });
-                    groupID = newGroupID.ToString();
-                    users.Groups.Find(g => g.GroupID == groupID).Users.Add(user);
-
-                }
-                await db.AddUserToGroup(userID, groupID);
-                await Groups.AddToGroupAsync(Context.ConnectionId, groupID);
-            }
-            else
-            {
-                var friendUser = users.Users.Find(u => u.UserID == friendID);
-
-                if (users.Groups.Exists(g => g.GroupID == groupID))
-                {
-                    //user doesn't exist in group list
-
-                    if (!users.Groups.Exists(g => g.GroupID == groupID))
-                    {
-                        var group = users.Groups.Find(g => g.GroupID == groupID);
-                        if (group.Users.Exists(u => u.UserID == friendID))
+                        if (!program.users.Groups.Exists(g => g.GroupID == groupID))
                         {
-                            users.Groups.Find(g => g.GroupID == groupID).Users.Add(friendUser);
+                            var group = program.users.Groups.Find(g => g.GroupID == groupID);
+                            if (group.Users.Exists(u => u.UserID == friendID))
+                            {
+                                program.users.Groups.Find(g => g.GroupID == groupID).Users.Add(friendUser);
+
+                            }
+                            //add user to group list
 
                         }
-                        //add user to group list
+
 
                     }
-
-
-                }
-                else
-                {
-                    int newGroupID = await db.CreateGroup(groupName);
-                    users.Groups.Add(new GroupModel()
+                    else
                     {
-                        GroupName = groupName,
-                        GroupID = groupID.ToString(),
-                        Users = new List<UserModel>()
+                        int newGroupID = await db.CreateGroup(groupName);
+                        program.users.Groups.Add(new GroupModel()
+                        {
+                            GroupName = groupName,
+                            GroupID = groupID.ToString(),
+                            Users = new List<UserModel>()
 
-                    });
-                    groupID = newGroupID.ToString();
-                    users.Groups.Find(g => g.GroupID == groupID).Users.Add(friendUser);
+                        });
+                        groupID = newGroupID.ToString();
+                        program.users.Groups.Find(g => g.GroupID == groupID).Users.Add(friendUser);
 
-                }
-                await db.AddUserToGroup(friendID, groupID);
-                if (friendUser.IsConnected)
-                {
-                    await Groups.AddToGroupAsync(friendUser.ConnectionID, groupID);
+                    }
+                    await db.AddUserToGroup(friendID, groupID);
+                    if (friendUser.IsConnected)
+                    {
+                        await Groups.AddToGroupAsync(friendUser.ConnectionID, groupID);
 
-                }
+                    }
                 }
 
             }
@@ -238,7 +247,7 @@ namespace SignalRChat.Hubs
         public async Task LogIn(string email, string password)
         {
 
-            // users.Users = new List<UserModel>();
+            // program.users.Users = new List<UserModel>();
             DbLogin login = new DbLogin();
 
             //Find ConnectionID
@@ -259,22 +268,35 @@ namespace SignalRChat.Hubs
                 stringUser[2] = user.Password;
                 stringUser[3] = user.UserID;
                 //add user to users list
-                if(users.Users.Exists(u => u.UserID == user.UserID))
+                if (program.users.Users.Exists(u => u.UserID == user.UserID))
                 {
-                    users.Users.Find(u => u.UserID == user.UserID).IsConnected = true;
+                    program.users.Users.Find(u => u.UserID == user.UserID).IsConnected = true;
+                    var group = program.users.Groups.Find(g => g.Users.Exists(u => u.UserID == user.UserID));
+                    group.Users.Find(u => u.UserID == user.UserID).IsConnected = true;
+
+                    Console.WriteLine("exist user "+program.users.Users.Find(u => u.UserID == user.UserID).IsConnected.ToString());
 
                 }
                 else
                 {
-                    users.Users.Add(user);
-                }
+                    user.IsConnected = true;
+                    program.users.Users.Add(user);
 
-                Console.WriteLine("done = " + users.Users.Find(u => u.UserID == user.UserID).Name);
+                    var group = program.users.Groups.Find(g => g.Users.Exists(u => u.UserID == user.UserID));
+                    group.Users.Find(u => u.UserID == user.UserID).IsConnected = true;
+
+                    Console.WriteLine("new user "+program.users.Users.Find(u => u.UserID == user.UserID).IsConnected.ToString());
+
+                }
+              /*  DbStartUp db = new DbStartUp();
+                var result = await db.GetGroups();
+                program.users.Groups = result;*/
+                Console.WriteLine("done = " + program.users.Users.Find(u => u.UserID == user.UserID).Name);
 
             }
             else
             {
-                stringUser[4] = "0";
+                stringUser[3] = "0";
             }
 
             await Clients.Client(cid).SendAsync("ReceiveAccount", stringUser);
@@ -283,7 +305,10 @@ namespace SignalRChat.Hubs
         public void LogOut(string userID)
         {
             //remove user from user list
-            users.Users.Find(u => u.UserID == userID).IsConnected = false;
+            program.users.Users.Find(u => u.UserID == userID).IsConnected = false;
+
+            var group = program.users.Groups.Find(g => g.Users.Exists(u => u.UserID == userID));
+            group.Users.Find(u => u.UserID == userID).IsConnected = false;
         }
 
         //-------------------------------------------------------------------------------------------------- Register Method
@@ -311,20 +336,20 @@ namespace SignalRChat.Hubs
         {
 
 
-            //Console.WriteLine("cw = " + users.Users.Find(u => u.UserID == userID).Password);
+            //Console.WriteLine("cw = " + program.users.Users.Find(u => u.UserID == userID).Password);
             string cid = Context.ConnectionId;
-            if (users.Users != null)
+            if (program.users.Users != null)
             {
 
-                if (users.Users.Exists(u => u.UserID == userID))
+                if (program.users.Users.Exists(u => u.UserID == userID))
                 {
-                    users.Users.Find(u => u.UserID == userID).ConnectionID = cid;
+                    program.users.Users.Find(u => u.UserID == userID).ConnectionID = cid;
 
                     Console.WriteLine("hey");
-                     //users.Groups.Where(g => g.Users.Exists(u => u.UserID == userID));
+                    //program.users.Groups.Where(g => g.Users.Exists(u => u.UserID == userID));
 
                     //Reconnect to all subscripted Groups
-                    foreach(var item in users.Groups.Where(g => g.Users.Exists(u => u.UserID == userID)))
+                    foreach (var item in program.users.Groups.Where(g => g.Users.Exists(u => u.UserID == userID)))
                     {
                         await Groups.AddToGroupAsync(cid, item.GroupID);
                     }

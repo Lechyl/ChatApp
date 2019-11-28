@@ -38,11 +38,14 @@ namespace ChatAppV3.ViewModels
 
             DisconnectCommand = new Command(async () =>
             {
-                await Disconnect();
+                //await Disconnect();
                 await Application.Current.MainPage.Navigation.PopModalAsync();
             });
 
-
+            AddUserCommand = new Command(async () => { 
+            
+            
+            });
 
 
             //Listening to the hub with specific method
@@ -57,7 +60,7 @@ namespace ChatAppV3.ViewModels
                 });
             });
 
-            hub.On<string>("LeaveChat" + currentGroup.groupID, (user) =>
+            /*hub.On<string>("LeaveChat" + currentGroup.groupID, (user) =>
             {
                 //Add a message to the Message collection
                 Messages.Add(new MessageModel()
@@ -66,7 +69,7 @@ namespace ChatAppV3.ViewModels
                     Message = $"{user} has left the chat",
                     IsSystemMessage = true
                 });
-            });
+            });*/
 
             hub.On<string, string>("ReceiveMessage"+ currentGroup.groupID, (user, message) =>
             {
@@ -80,8 +83,23 @@ namespace ChatAppV3.ViewModels
                 });
             });
 
-            hub.On<List<MessageModel>>("ReceivedDBMessages" + currentGroup.groupID, (ls) => 
-            { 
+            hub.On<List<MessageModel>>("ReceiveDBMessages" + currentGroup.groupID, (ls) => 
+            {
+                
+                foreach (var u in ls)
+                {
+                    Messages.Add(new MessageModel()
+                    {
+                        
+                        User = u.User,
+                        Message = u.Message,
+                        IsOwnMessage = u.IsOwnMessage,
+                        IsSystemMessage = u.IsSystemMessage
+
+                    });
+                }
+
+
             
             });
 
@@ -93,7 +111,7 @@ namespace ChatAppV3.ViewModels
 
         public Command SendMessageCommand { get; }
         public Command DisconnectCommand { get; }
-
+        public Command AddUserCommand { get; }
         private GroupListModel currentGroup;
         private UserModel user;
         private string groupName;
@@ -149,13 +167,21 @@ namespace ChatAppV3.ViewModels
         
 
         //Send data to the hub
+
+        
+        async Task AddUserToChat(string groupName, string userID, string groupID, string friendID)
+        {
+            await hub.InvokeAsync("AddToGroup", groupName, userID, groupID, friendID);
+        }
         async Task Connect()
         {
             //Start Connection to the hub
             await ConnectAsync();
+             await hub.InvokeAsync("GetMessages",user.UserID, currentGroup.groupID);
+
             //Invoke/Raise hub method, It'll raise/run a specific method in the hub
-            await hub.InvokeAsync("JoinChat", Name,user.UserID, currentGroup.groupID);
-            
+            // await hub.InvokeAsync("JoinChat", Name,user.UserID, currentGroup.groupID);
+
         }
 
         async Task SendMessage(string groupID,string message, string user, string userID)
@@ -164,7 +190,7 @@ namespace ChatAppV3.ViewModels
             await hub.InvokeAsync("SendMsgToGroup", groupID, message, user, userID );
         }
 
-        async Task Disconnect()
+       /* async Task Disconnect()
         {
             //Invoke/Raise hub method, It'll raise/run a specific method in the hub
             await hub.InvokeAsync("LeaveChat", Name,user.UserID,currentGroup.groupID);
@@ -172,7 +198,7 @@ namespace ChatAppV3.ViewModels
             //Stop  Connection to the hub
 
             //trigger IsConnected event, to disable display to chat
-        }
+        } */
 
         protected virtual void OnPropertyChanged([CallerMemberName]string propertyName = "")
         {

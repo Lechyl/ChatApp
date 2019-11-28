@@ -25,17 +25,11 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <BoxView BackgroundColor="#2ac2c5" />
+
         <Label
             Margin="10"
             FontSize="20"
             HorizontalOptions="FillAndExpand"
-            HorizontalTextAlignment="Start"
-            Text="{Binding GroupName}"
-            TextColor="White" />
-        <Label
-            Margin="10"
-            FontSize="20"
-            HorizontalOptions="End"
             HorizontalTextAlignment="Start"
             Text="Close"
             TextColor="White">
@@ -43,7 +37,25 @@
                 <TapGestureRecognizer Command="{Binding DisconnectCommand}" />
             </Label.GestureRecognizers>
         </Label>
-    <!--Chat room-->
+        <Label
+            Margin="10"
+            FontSize="20"
+            HorizontalOptions="FillAndExpand"
+            HorizontalTextAlignment="Center"
+            Text="{Binding GroupName}"
+            TextColor="White" />
+        <Label
+            Margin="10"
+            FontSize="25"
+            HorizontalOptions="FillAndExpand"
+            HorizontalTextAlignment="End"
+            Text="+"
+            TextColor="White" >
+            <Label.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding AddUserCommand}"/>
+            </Label.GestureRecognizers>
+        </Label>
+        <!--Chat room-->
         <ListView
             Grid.Row="1"
             FlowDirection="RightToLeft"
