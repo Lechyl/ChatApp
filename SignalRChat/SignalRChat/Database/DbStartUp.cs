@@ -30,7 +30,6 @@ namespace SignalRChat.Database
                 
                 while( reader.Read())
                 {
-                    Console.WriteLine("asd");
                     if (reader.HasRows)
                     {
                         UserModel user = new UserModel() {
@@ -63,8 +62,44 @@ namespace SignalRChat.Database
                 }
 
                 conn.Close();
-
+                Console.WriteLine("Up and running...");
                 return groups;
+            }
+
+
+
+        }
+
+        public List<UserModel> GetUsers()
+        {
+
+
+            string connectionString = "Server= DESKTOP-K46TA7S; Database= ChatDB; Integrated Security=True;";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+                string query = "select name,id from Users";
+                SqlCommand cmd = new SqlCommand(query,conn);
+
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                List<UserModel> ls = new List<UserModel>();
+                while (reader.Read())
+                {
+                    ls.Add(new UserModel()
+                    {
+                        UserID =Convert.ToString( reader["id"]),
+                        Name = (string)reader["name"]
+
+                    });
+
+                }
+
+
+                conn.Close();
+
+                return ls;
             }
 
         }

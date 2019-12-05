@@ -22,6 +22,9 @@
     <Compile Update="Views\FriendListPage.xaml.cs">
       <DependentUpon>FriendListPage.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\SideBarPage.xaml.cs">
+      <DependentUpon>SideBarPage.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\RegisterPage.xaml.cs">
       <DependentUpon>RegisterPage.xaml</DependentUpon>
     </Compile>
@@ -32,6 +35,9 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\FriendListPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\SideBarPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\RegisterPage.xaml">

@@ -22,7 +22,7 @@ namespace ChatAppV3.Views
         {
             InitializeComponent();
         }
-
+      
         private void MenuItem_Clicked(object sender, EventArgs e)
         {
 
@@ -56,6 +56,7 @@ namespace ChatAppV3.Views
             {
                 Application.Current.Properties["CurrentGroup"] = json;
             }
+            
             await Navigation.PushModalAsync(new ChatPage(),false); 
 
             //});

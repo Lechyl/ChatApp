@@ -28,9 +28,13 @@ namespace ChatAppV3.ViewModels
             
             StartOptions();
             IsRefreshed = false;
-            Reconnect = false;
-            ShowGroupList = true;
-            Error = false;
+            if (!IsConnected)
+            {
+                Reconnect = false;
+
+            }
+
+
 
             Groups = new ObservableCollection<GroupListModel>();
             //GetFriendList(user.UserID);
@@ -42,7 +46,11 @@ namespace ChatAppV3.ViewModels
 
             ChatRoomCommand = new Command(async () => {
                 // await GoToChat();
-                await Application.Current.MainPage.Navigation.PushAsync(new ChatPage(), false);
+                ChatPageVM vm = new ChatPageVM();
+                ChatPage page = new ChatPage();
+                page.BindingContext = vm;
+
+                await Application.Current.MainPage.Navigation.PushAsync(page, false);
 
             });
 
@@ -58,60 +66,27 @@ namespace ChatAppV3.ViewModels
             ReconnectCommand = new Command(async () =>
             {
                // await GoToChat();
+               await ConnectAsync();
                 Reconnect = true;
 
+
             });
 
-            AddGroupCommand = new Command(async () =>
-            {
-                if (!string.IsNullOrWhiteSpace(GroupName))
-                {
-                    await AddGroupOrUserToGroup(GroupName, user.UserID);
 
-                }
-                else
-                {
-                    Error = true;
-                }
-            });
-
-            ShowAddGroupCommand = new Command(async () =>
-            {
-                //GroupName = user.Email + user.ConnectionID;
-                await GetFriendList(user.UserID);
-                ShowGroupList = !ShowGroupList;
-            });
-
-            LogOutCommand = new Command(async() =>
-            {
-                await LogOut();
-            });
 
             hub.On<List<GroupListModel>>("ReceiveGroupList", (ls) => {
-
-                GroupName = "a";
                 Groups.Clear();
 
-                if (ls.Count > 0)
-                {
-                    GroupName = "s";
-                }
-                else
-                {
-                    GroupName = "g";
-                }
+
                 foreach (var item in ls)
                 {
-                    GroupName += item.groupName;
+                    
                     Groups.Add(new GroupListModel() { groupName = item.groupName, groupID = item.groupID });
 
                     
                 }
                
-                /*foreach (var groupName in ls)
-                {hhh
-                    groups.Add(groupName);
-                }*/
+
 
             });
 
@@ -123,14 +98,10 @@ namespace ChatAppV3.ViewModels
 
         private UserModel user;
 
-        private bool error;
-        private bool showGroupList;
         private bool reconnect;
         private bool isRefreshed;
-        private string groupName;
-        public Command AddGroupCommand { get; }
-        public Command ShowAddGroupCommand { get; }
-        public Command LogOutCommand { get; }
+
+
         public Command RefreshCommand { get; }
         public Command ReconnectCommand { get; }
         public Command ChatRoomCommand { get; }
@@ -170,36 +141,9 @@ namespace ChatAppV3.ViewModels
 
 
 
-        public bool Error
-        {
-            get => error;
-            set
-            {
-                error = value;
 
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Error)));
-            }
-        }
-        public string GroupName
-        {
-            get => groupName;
-            set
-            {
-                groupName = value;
 
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(GroupName)));
-            }
-        }
-        public bool ShowGroupList
-        {
-            get => showGroupList;
-            set
-            {
-                showGroupList = value;
 
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ShowGroupList)));
-            }
-        }
         public async Task GetFriendList(string userID)
         {
             await ConnectAsync();
@@ -208,11 +152,7 @@ namespace ChatAppV3.ViewModels
 
         }
 
-        public async Task AddGroupOrUserToGroup(string groupName,string userID)
-        {
 
-            await hub.InvokeAsync("AddToGroup", groupName, userID,null, null);
-        }
         public void StartOptions()
         {
 
@@ -237,44 +177,6 @@ namespace ChatAppV3.ViewModels
 
 
         }
-
-
-
-        private async Task OnReconnect()
-        {
-            await _semaphore.WaitAsync();
-            try
-            {
-                await ConnectAsync();
-
-                await hub.InvokeAsync("ReconnectUser", user.UserID);
-                GroupName += "A ";
-
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-
-            
-        }
-
-        public async Task LogOut()
-        {
-            Application.Current.Properties.Clear();
-            await Application.Current.SavePropertiesAsync();
-            /*LoginVM viewModel = new LoginVM();
-            LoginPage page = new LoginPage();
-
-            page.BindingContext = viewModel;*/
-
-            await Application.Current.MainPage.Navigation.PopModalAsync();
-            await DisconnectAsync();
-        }
-
-
-
        
     }
 }

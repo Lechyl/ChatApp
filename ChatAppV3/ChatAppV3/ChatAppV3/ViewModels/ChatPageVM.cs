@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using ChatAppV3.Models;
+using ChatAppV3.Views;
 using System.Text.Json;
 using ChatAppV3.HubClientCon;
 using System.Collections.Generic;
@@ -15,18 +16,29 @@ namespace ChatAppV3.ViewModels
     class ChatPageVM :  HubConnClient,INotifyPropertyChanged
     {
 
-
         public ChatPageVM()
         {
             //Instantiate
             StartOptions();
-
+            IsSearching = false;
             Messages = new ObservableCollection<MessageModel>();
-
+            Friends = new ObservableCollection<FriendsModel>();
+            
             Task.Run(async () => {
                 await Connect();
             });
 
+            SearchCommand = new Command(async() => {
+                await SearchUsersByName(currentGroup.groupID ,user.UserID, SearchName);
+            
+            });
+
+            ShowSearch = new Command(() =>
+            {
+
+                IsSearching = !IsSearching;
+
+            });
             SendMessageCommand = new Command(async () =>
             {
 
@@ -34,23 +46,29 @@ namespace ChatAppV3.ViewModels
                 Message = string.Empty;
             });
 
-
+            
 
             DisconnectCommand = new Command(async () =>
             {
-                //await Disconnect();
+                //await Application.Current.MainPage.DisplayAlert("ss", "Disconnect", "ok");
                 await Application.Current.MainPage.Navigation.PopModalAsync();
             });
 
-            AddUserCommand = new Command(async () => { 
-            
-            
+            AddUserCommand = new Command<FriendsModel>(async (FriendsModel friend) => {
+                bool confirm = await Application.Current.MainPage.DisplayAlert("Notification", $"Do you want to add {friend.Name} to the group?", "Yes","Cancel");
+
+                if (confirm)
+                {
+                    await AddUserToGroup(currentGroup.groupName, user.UserID, currentGroup.groupID, friend.FriendID);
+
+                }
             });
 
 
             //Listening to the hub with specific method
-            hub.On<string>("JoinChat" + currentGroup.groupID, (user) =>
+            /*hub.On<string>("JoinChat" + currentGroup.groupID, (user) =>
             {
+
                 //Add a message to the Message collection
                 Messages.Add(new MessageModel()
                 {
@@ -59,7 +77,7 @@ namespace ChatAppV3.ViewModels
                     IsSystemMessage = true
                 });
             });
-
+            */
             /*hub.On<string>("LeaveChat" + currentGroup.groupID, (user) =>
             {
                 //Add a message to the Message collection
@@ -74,7 +92,7 @@ namespace ChatAppV3.ViewModels
             hub.On<string, string>("ReceiveMessage"+ currentGroup.groupID, (user, message) =>
             {
                 //Add a message to the Message collection
-                Messages.Add(new MessageModel()
+                Messages.Insert(0,new MessageModel()
                 {
                     User = user,
                     Message = message,
@@ -83,42 +101,89 @@ namespace ChatAppV3.ViewModels
                 });
             });
 
-            hub.On<List<MessageModel>>("ReceiveDBMessages" + currentGroup.groupID, (ls) => 
+            hub.On<List<MessageModel>>("JoinChat"+ currentGroup.groupID, (ls) => 
             {
-                
-                foreach (var u in ls)
-                {
-                    Messages.Add(new MessageModel()
-                    {
-                        
-                        User = u.User,
-                        Message = u.Message,
-                        IsOwnMessage = u.IsOwnMessage,
-                        IsSystemMessage = u.IsSystemMessage
 
+                Messages.Clear();
+                    foreach (var u in ls)
+                    {
+                        Messages.Insert(0,new MessageModel()
+                        {
+
+                            User = u.User,
+                            Message = u.Message,
+                            IsOwnMessage = u.IsOwnMessage,
+                            IsSystemMessage = u.IsSystemMessage
+
+                        });
+                    }
+            
+            });
+
+            hub.On<List<FriendsModel>>("ReceiveSearchUsers", (ls) =>
+            {
+
+                Friends.Clear();
+                foreach (var item in ls)
+                {
+                    Friends.Add(new FriendsModel() { 
+                        FriendID = item.FriendID,
+                        Name = item.Name
                     });
                 }
 
-
-            
             });
+
+
 
         }
 
 
         //Create Fields
         public event PropertyChangedEventHandler PropertyChanged;
-
+        public Command ShowSearch { get; }
         public Command SendMessageCommand { get; }
         public Command DisconnectCommand { get; }
         public Command AddUserCommand { get; }
+        public Command SearchCommand { get; }
         private GroupListModel currentGroup;
         private UserModel user;
         private string groupName;
         private string _name;
         private string _message;
+        private string _searchName;
         private ObservableCollection<MessageModel> _messages;
+        private ObservableCollection<FriendsModel> _friends;
+        private bool isSearching;
 
+        public ObservableCollection<FriendsModel> Friends
+        {
+            get => _friends;
+            set
+            {
+                _friends = value;
+                OnPropertyChanged();
+            }
+        }
+        public string SearchName
+        {
+            get => _searchName;
+            set
+            {
+                _searchName = value;
+                OnPropertyChanged();
+            }
+        }
+        public bool IsSearching
+        {
+            get => isSearching;
+            set
+            {
+                isSearching = value;
+
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsSearching)));
+            }
+        }
 
         public string GroupName
         {
@@ -168,19 +233,26 @@ namespace ChatAppV3.ViewModels
 
         //Send data to the hub
 
-        
-        async Task AddUserToChat(string groupName, string userID, string groupID, string friendID)
+        async Task AddUserToGroup(string groupName, string userID, string groupID, string friendID)
         {
             await hub.InvokeAsync("AddToGroup", groupName, userID, groupID, friendID);
         }
+        async Task SearchUsersByName(string groupID, string userID, string search)
+        {
+            await hub.InvokeAsync("Search",groupID, userID, search);
+        }
+        
+   
         async Task Connect()
         {
             //Start Connection to the hub
             await ConnectAsync();
-             await hub.InvokeAsync("GetMessages",user.UserID, currentGroup.groupID);
+
+             await hub.InvokeAsync("JoinChatRoom", user.UserID, currentGroup.groupID);
+
+            // await hub.InvokeAsync("GetMessages",user.UserID, currentGroup.groupID);
 
             //Invoke/Raise hub method, It'll raise/run a specific method in the hub
-            // await hub.InvokeAsync("JoinChat", Name,user.UserID, currentGroup.groupID);
 
         }
 
@@ -190,7 +262,7 @@ namespace ChatAppV3.ViewModels
             await hub.InvokeAsync("SendMsgToGroup", groupID, message, user, userID );
         }
 
-       /* async Task Disconnect()
+        async Task Disconnect()
         {
             //Invoke/Raise hub method, It'll raise/run a specific method in the hub
             await hub.InvokeAsync("LeaveChat", Name,user.UserID,currentGroup.groupID);
@@ -198,7 +270,7 @@ namespace ChatAppV3.ViewModels
             //Stop  Connection to the hub
 
             //trigger IsConnected event, to disable display to chat
-        } */
+        } 
 
         protected virtual void OnPropertyChanged([CallerMemberName]string propertyName = "")
         {

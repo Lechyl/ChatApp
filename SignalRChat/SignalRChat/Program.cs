@@ -29,8 +29,10 @@ namespace SignalRChat
         public static void Main(string[] args)
         {
             DbStartUp db = new DbStartUp();
-            var result = db.GetGroups();
-            groups = result;
+            var getGroups = db.GetGroups();
+            var getUsers = db.GetUsers();
+            groups = getGroups;
+            userlist = getUsers;
             CreateWebHostBuilder(args).Build().Run();
 
            
@@ -43,9 +45,6 @@ namespace SignalRChat
                 //.UseIISIntegration()
                 .UseStartup<Startup>();
 
-        public string test()
-        {
-            return "--------------------------------------";
-        }
+
     }
 }

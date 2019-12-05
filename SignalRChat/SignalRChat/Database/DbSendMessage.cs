@@ -45,7 +45,7 @@ namespace SignalRChat.Database
                 List<ClientMessage> ls = new List<ClientMessage>();
                 while ( await reader.ReadAsync())
                 {
-                    ls.Add(new ClientMessage() { message = (string)reader["message"], user = (string)reader["name"], isOwnMessage = (string)reader["userID"] == userID, isSystemMessage = false });
+                    ls.Add(new ClientMessage() { message = (string)reader["message"], user = (string)reader["name"], isOwnMessage = Convert.ToString(reader["userID"]) == userID, isSystemMessage = false });
                 }
                 conn.Close();
                 return ls;

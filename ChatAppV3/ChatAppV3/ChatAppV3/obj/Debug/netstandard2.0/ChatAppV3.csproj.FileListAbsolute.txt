@@ -27,3 +27,4 @@ C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3\bin\Debug\ne
 C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3\bin\Debug\netstandard2.0\ref\ChatAppV3.dll
 C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3\bin\Debug\netstandard2.0\ChatAppV3.pdb
 C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3\obj\Debug\netstandard2.0\XamlC.stamp
+C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3\obj\Debug\netstandard2.0\Views\SideBarPage.xaml.g.cs

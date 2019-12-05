@@ -37,7 +37,7 @@
             Text="CHAT APP"
             TextColor="Black" />
         <Editor Grid.Row="1"  Grid.ColumnSpan="3" Placeholder="Email" Text="{Binding Email}"/>
-        <Editor Grid.Row="2" Grid.ColumnSpan="3" Placeholder="Password" Text="{Binding Password}"/>
+        <Entry Grid.Row="2"  Grid.ColumnSpan="3" IsPassword="True" Placeholder="Password" Text="{Binding Password}"/>
         <Label Grid.Row="3" Grid.ColumnSpan="3" Text="{Binding ErrorMsg}" TextColor="Red" IsVisible="{Binding IsError}"/>
         <Button Grid.Row="4" Grid.ColumnSpan="3" Text="Login" Command="{Binding LoginCommand}"/>
 

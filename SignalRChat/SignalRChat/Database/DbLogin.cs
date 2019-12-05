@@ -83,13 +83,11 @@ namespace SignalRChat.Database
                         {
                             
 
-                            Console.WriteLine("CW");
                             user.Friends.Add(new FriendsModel()
                             {
                                 FriendID = Convert.ToString(reader["FriendID"]),
                                 Name = Convert.ToString(reader["Name"])
                             });
-                            Console.WriteLine("ehey");
                         }
 
                     }

@@ -16,70 +16,50 @@
     <ContentPage.BindingContext>
         <local:FriendListVM />
     </ContentPage.BindingContext>
-    <Grid>
-        <Grid IsVisible="{Binding Reconnect, Converter={StaticResource InserseBool}}">
+    <Grid >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <!--  <BoxView Grid.Row="0" Grid.ColumnSpan="3" BackgroundColor="#2ac2c5" />
+                <Button Grid.Row="0" Grid.Column="0" Text="menu" Command="{Binding MenuCommand}"/>
+                <Button Grid.Row="0" Grid.Column="1" Text="Create Group" Command="{Binding ShowAddGroupCommand}"/>
+                <Button Grid.Row="0" Grid.Column="2" Text="LogOut" Command="{Binding LogOutCommand}"/>
+                 -->
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
+        <ListView Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="3" ItemsSource="{Binding Groups}" SelectionMode="Single" ItemTapped="MyTappedItem" IsPullToRefreshEnabled="True" RefreshCommand="{Binding RefreshCommand}" IsRefreshing="{Binding IsRefreshed, Mode=OneWay}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Grid>
 
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-
-            </Grid.RowDefinitions>
-            <Button Grid.Row="2" Command="{Binding ReconnectCommand}" Text="Reconnect To App"/>
-        </Grid>
-        <Grid IsVisible="{Binding Reconnect}">
-            <Grid IsVisible="{Binding ShowGroupList, Converter={StaticResource InserseBool}}">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <Editor Grid.Row="0" Text="{Binding GroupName}" Placeholder="group name" />
-                <Label Text="This group already exist or the field is empty" IsVisible="{Binding Error}"/>
-                <Button Grid.Row="1" Text="Create Group" Command="{Binding AddGroupCommand}"/>
-                <Button Grid.Row="2" Text="Go Back" Command="{Binding ShowAddGroupCommand}"/>
-            </Grid>
-            <Grid IsVisible="{Binding ShowGroupList}">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <Button Grid.Row="0" Text="  +  " Command="{Binding ShowAddGroupCommand}"/>
-                <ListView Grid.Row="1" Grid.RowSpan="2" ItemsSource="{Binding Groups}" SelectionMode="Single" ItemTapped="MyTappedItem" IsPullToRefreshEnabled="True" RefreshCommand="{Binding RefreshCommand}" IsRefreshing="{Binding IsRefreshed, Mode=OneWay}">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <ViewCell>
-                                <Grid>
-
-                                    <StackLayout BackgroundColor="#eee"
+                            <StackLayout BackgroundColor="#eee"
                         Orientation="Vertical">
-                                    <StackLayout Orientation="Horizontal" HorizontalOptions="StartAndExpand" VerticalOptions="CenterAndExpand">
+                                <StackLayout Orientation="Horizontal" HorizontalOptions="StartAndExpand" VerticalOptions="CenterAndExpand">
 
-                                            <Label
+                                    <Label
                                             Margin="10"
                                             LineBreakMode="CharacterWrap"
                                             Text="{Binding groupName}"
                                             TextColor="Black"
                                             VerticalOptions="FillAndExpand" >
-                                            </Label>
-                                            <Label Text="{Binding groupID}" IsVisible="False"/>
+                                    </Label>
+                                    <Label Text="{Binding groupID}" IsVisible="False"/>
 
-                                        </StackLayout>
                                 </StackLayout>
-                                </Grid>
-                            </ViewCell>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-                <Button Grid.Row="3" Text="LogOut" Command="{Binding LogOutCommand}"/>
-            </Grid>
-        </Grid>
+                            </StackLayout>
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
     </Grid>
 </ContentPage>

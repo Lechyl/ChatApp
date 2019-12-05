@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:ChatAppV3.ViewModels"
              xmlns:converters="clr-namespace:ChatAppV3.Converters"
              mc:Ignorable="d"
-             x:Class="ChatAppV3.Views.ChatPage">
+             x:Class="ChatAppV3.Views.ChatPage" x:Name="page">
 
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -18,15 +18,29 @@
         <local:ChatPageVM/>
     </ContentPage.BindingContext>
 
-<Grid>
+    <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <BoxView BackgroundColor="#2ac2c5" />
 
-        <Label
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+
+            </Grid.RowDefinitions>
+
+            <Label
+            Grid.Column="0"
+            Grid.Row="0"
             Margin="10"
             FontSize="20"
             HorizontalOptions="FillAndExpand"
@@ -34,39 +48,73 @@
             Text="Close"
             TextColor="White">
             <Label.GestureRecognizers>
-                <TapGestureRecognizer Command="{Binding DisconnectCommand}" />
+                <TapGestureRecognizer Command="{Binding DisconnectCommand}"/>
             </Label.GestureRecognizers>
         </Label>
+            
         <Label
+            Grid.Column="1" 
+            Grid.Row="0"
+            LineBreakMode="TailTruncation"    
             Margin="10"
             FontSize="20"
             HorizontalOptions="FillAndExpand"
             HorizontalTextAlignment="Center"
             Text="{Binding GroupName}"
             TextColor="White" />
-        <Label
+          
+           
+        <Label            
+            Grid.Column="2"
+            Grid.Row="0"
             Margin="10"
-            FontSize="25"
+            FontSize="20"
             HorizontalOptions="FillAndExpand"
             HorizontalTextAlignment="End"
             Text="+"
-            TextColor="White" >
+            TextColor="White"
+            >
             <Label.GestureRecognizers>
-                <TapGestureRecognizer Command="{Binding AddUserCommand}"/>
+                <TapGestureRecognizer Command="{Binding ShowSearch}" NumberOfTapsRequired="1"/>
             </Label.GestureRecognizers>
         </Label>
-        <!--Chat room-->
-        <ListView
-            Grid.Row="1"
-            FlowDirection="RightToLeft"
-            HasUnevenRows="True"
-            ItemsSource="{Binding Messages}"
-            SeparatorVisibility="None"
-            VerticalOptions="End">
+            <SearchBar  Grid.Row="1" Grid.ColumnSpan="3" Placeholder="Search user by name or Email" CancelButtonColor="Red" IsVisible="{Binding IsSearching}" Text="{Binding SearchName}" SearchCommand="{Binding SearchCommand}"/>
+
+        </Grid>
+
+        <ListView Grid.Row="1" ItemsSource="{Binding Friends}" IsVisible="{Binding IsSearching}" SelectionMode="Single" IsPullToRefreshEnabled="False">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
-                        <Grid>
+                        <StackLayout>
+                            <Label Text="{Binding Name}">
+                            </Label>
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Path=BindingContext.AddUserCommand, Source={x:Reference page} }" CommandParameter="{Binding .}" NumberOfTapsRequired="1"/>
+
+                            </StackLayout.GestureRecognizers>
+                        </StackLayout>
+                        
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <!--Chat room-->
+        <ListView
+            IsVisible="{Binding IsSearching, Converter={StaticResource InverseBool}}"
+            Grid.Row="1"
+            FlowDirection="RightToLeft"
+            Rotation="180"
+            HasUnevenRows="True"
+            ItemsSource="{Binding Messages}"
+            SeparatorVisibility="None"
+            IsPullToRefreshEnabled="False"
+            >
+            <ListView.ItemTemplate>
+                <DataTemplate >
+                    <ViewCell >
+                        <Grid Rotation="180" FlowDirection="RightToLeft">
                             <!--if it is system message-->
                             <Grid IsVisible="{Binding IsSystemMessage}">
                                 <Label
@@ -154,7 +202,7 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-    <!--Send message-->
+        <!--Send message-->
         <Grid
             Grid.Row="2"
             ColumnSpacing="0"
@@ -176,8 +224,9 @@
                 HorizontalOptions="FillAndExpand"
                 Text="Send"
                 VerticalOptions="FillAndExpand" />
+
         </Grid>
-           <!-- if I'm not connected yet-->
+        <!-- if I'm not connected yet-->
 
     </Grid>
 

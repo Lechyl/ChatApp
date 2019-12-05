@@ -61,35 +61,43 @@ namespace ChatAppV3.ViewModels
 
                     //FriendListVM viewModel = new FriendListVM();
 
-                  //  FriendListPage page = new FriendListPage();
+                    //  FriendListPage page = new FriendListPage();
 
-                   // page.BindingContext = viewModel;
+                    // page.BindingContext = viewModel;
 
-                    await Application.Current.MainPage.Navigation.PushModalAsync(new FriendListPage(), false);
+                    var page = new MasterDetailPage()
+                    {
+                        Master = new SideBarPage() { Title = "Main Page" },
+                        Detail = new NavigationPage(new FriendListPage())
+                    };
+                    await Application.Current.MainPage.Navigation.PushModalAsync(page, false);
 
                     // await Application.Current.MainPage.Navigation.PushModalAsync(page);
                 }
                 else
                 {
+
                     IsError = true;
                     ErrorMsg = "Email and/or Password are incorrect!";
-                    await DisconnectAsync();
+
                 }
             });
 
             LoginCommand = new Command(async() =>
             {
-                if(!string.IsNullOrWhiteSpace(Email) && !string.IsNullOrWhiteSpace(Password))
+                await ConnectAsync();
+
+                if (!string.IsNullOrWhiteSpace(Email) && !string.IsNullOrWhiteSpace(Password))
                 {
-                    await ConnectAsync();
                     await Login(Email, Password);
                 }
                 else
                 {
+
                     IsError = true;
                     ErrorMsg = "Email and/or Password are incorrect!";
-                    await DisconnectAsync();
                 }
+
 
             });
 
@@ -101,7 +109,6 @@ namespace ChatAppV3.ViewModels
 
                 //registerPage.BindingContext = registerVM;
                 await Application.Current.MainPage.Navigation.PushModalAsync(new RegisterPage(), false);
-                await DisconnectAsync();
 
             });
         }
