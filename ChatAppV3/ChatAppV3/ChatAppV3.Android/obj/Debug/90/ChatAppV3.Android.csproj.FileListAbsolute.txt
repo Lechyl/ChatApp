@@ -945,8 +945,6 @@ C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3.Android\obj\
 C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3.Android\obj\Debug\90\android\src\md51558244f76c53b6aeda52c8a337f2c37\InnerGestureListener.java
 C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3.Android\obj\Debug\90\android\src\md51558244f76c53b6aeda52c8a337f2c37\InnerScaleListener.java
 C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3.Android\obj\Debug\90\android\src\md51558244f76c53b6aeda52c8a337f2c37\ItemContentView.java
-C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3.Android\obj\Debug\90\android\src\md51558244f76c53b6aeda52c8a337f2c37\ItemsViewAdapter.java
-C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3.Android\obj\Debug\90\android\src\md51558244f76c53b6aeda52c8a337f2c37\ItemsViewRenderer.java
 C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3.Android\obj\Debug\90\android\src\md51558244f76c53b6aeda52c8a337f2c37\LabelRenderer.java
 C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3.Android\obj\Debug\90\android\src\md51558244f76c53b6aeda52c8a337f2c37\ListViewAdapter.java
 C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3.Android\obj\Debug\90\android\src\md51558244f76c53b6aeda52c8a337f2c37\ListViewRenderer.java
@@ -977,8 +975,6 @@ C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3.Android\obj\
 C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3.Android\obj\Debug\90\android\src\md51558244f76c53b6aeda52c8a337f2c37\ScrollViewContainer.java
 C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3.Android\obj\Debug\90\android\src\md51558244f76c53b6aeda52c8a337f2c37\ScrollViewRenderer.java
 C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3.Android\obj\Debug\90\android\src\md51558244f76c53b6aeda52c8a337f2c37\SearchBarRenderer.java
-C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3.Android\obj\Debug\90\android\src\md51558244f76c53b6aeda52c8a337f2c37\SelectableItemsViewAdapter.java
-C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3.Android\obj\Debug\90\android\src\md51558244f76c53b6aeda52c8a337f2c37\SelectableItemsViewRenderer.java
 C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3.Android\obj\Debug\90\android\src\md51558244f76c53b6aeda52c8a337f2c37\SelectableViewHolder.java
 C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3.Android\obj\Debug\90\android\src\md51558244f76c53b6aeda52c8a337f2c37\ShellContentFragment.java
 C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3.Android\obj\Debug\90\android\src\md51558244f76c53b6aeda52c8a337f2c37\ShellFlyoutRecyclerAdapter.java
@@ -1075,7 +1071,6 @@ C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3.Android\obj\
 C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3.Android\obj\Debug\90\android\src\md58432a647068b097f9637064b8985a5e0\SwitchRenderer.java
 C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3.Android\obj\Debug\90\android\src\md58432a647068b097f9637064b8985a5e0\TabbedPageRenderer.java
 C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3.Android\obj\Debug\90\android\src\md58432a647068b097f9637064b8985a5e0\ViewRenderer_2.java
-C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3.Android\obj\Debug\90\android\src\md5423e3a95c357eb7d6aad61b4f54abbd4\RecyclerViewScrollListener.java
 C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3.Android\obj\Debug\90\android\src\android\support\customtabs\CustomTabsClient_CustomTabsCallbackImpl.java
 C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3.Android\obj\Debug\90\android\src\android\support\customtabs\R.java
 C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3.Android\obj\Debug\90\android\src\android\support\coordinatorlayout\R.java
@@ -1096,3 +1091,17 @@ C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3.Android\obj\
 C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3.Android\obj\Debug\90\stamp\_ResolveLibraryProjectImports.stamp
 C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3.Android\obj\Debug\90\linksrc\Newtonsoft.Json.dll
 C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3.Android\obj\Debug\90\android\assets\Newtonsoft.Json.dll
+C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3.Android\obj\Debug\90\_VerifyXamarinAndroidSupportVersions.stamp
+C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3.Android\obj\Debug\90\android\src\md51558244f76c53b6aeda52c8a337f2c37\CarouselSpacingItemDecoration.java
+C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3.Android\obj\Debug\90\android\src\md51558244f76c53b6aeda52c8a337f2c37\GroupableItemsViewAdapter_2.java
+C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3.Android\obj\Debug\90\android\src\md51558244f76c53b6aeda52c8a337f2c37\GroupableItemsViewRenderer_3.java
+C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3.Android\obj\Debug\90\android\src\md51558244f76c53b6aeda52c8a337f2c37\ItemsViewAdapter_2.java
+C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3.Android\obj\Debug\90\android\src\md51558244f76c53b6aeda52c8a337f2c37\ItemsViewRenderer_3.java
+C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3.Android\obj\Debug\90\android\src\md51558244f76c53b6aeda52c8a337f2c37\ListViewRenderer_ListViewScrollDetector.java
+C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3.Android\obj\Debug\90\android\src\md51558244f76c53b6aeda52c8a337f2c37\RefreshViewRenderer.java
+C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3.Android\obj\Debug\90\android\src\md51558244f76c53b6aeda52c8a337f2c37\SelectableItemsViewAdapter_2.java
+C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3.Android\obj\Debug\90\android\src\md51558244f76c53b6aeda52c8a337f2c37\SelectableItemsViewRenderer_3.java
+C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3.Android\obj\Debug\90\android\src\md51558244f76c53b6aeda52c8a337f2c37\StructuredItemsViewAdapter_2.java
+C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3.Android\obj\Debug\90\android\src\md51558244f76c53b6aeda52c8a337f2c37\StructuredItemsViewRenderer_3.java
+C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3.Android\obj\Debug\90\android\src\md5423e3a95c357eb7d6aad61b4f54abbd4\RecyclerViewScrollListener_2.java
+C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3.Android\obj\Debug\90\res\drawable\check.png

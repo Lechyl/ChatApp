@@ -13,26 +13,29 @@ namespace ChatAppV3.HubClientCon
         public bool IsConnected { get; set; }
         public HubConnClient()
         {
+            //Insert ipaddress of your Hub
             hub = new HubConnectionBuilder()
                 .WithUrl($"http://172.16.3.54:5565/chathub")
                     .WithAutomaticReconnect()
                         .Build();
+
+            //if connection shutdown on error trying to revive.
             hub.Closed += async (error) =>
             {
                 IsConnected = false;
                 try
                 {
-                    bool reconnected  = ConnectAsync().Wait(5000);
-                    
+                    bool reconnected = ConnectAsync().Wait(5000);
+
                     if (!reconnected)
                     {
-                      await  DisconnectAsync();
+                        await DisconnectAsync();
 
-                      await Application.Current.MainPage.Navigation.PopModalAsync(false);
-                        
+                        await Application.Current.MainPage.Navigation.PopModalAsync(false);
+
                     }
                 }
-                finally 
+                finally
                 {
                     await DisconnectAsync();
 

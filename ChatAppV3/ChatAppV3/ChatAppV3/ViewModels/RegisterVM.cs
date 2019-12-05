@@ -11,7 +11,7 @@ using Xamarin.Essentials;
 
 namespace ChatAppV3.ViewModels
 {
-    class RegisterVM : HubConnClient,INotifyPropertyChanged
+    class RegisterVM : HubConnClient, INotifyPropertyChanged
     {
 
         public RegisterVM()
@@ -19,14 +19,10 @@ namespace ChatAppV3.ViewModels
             IsError = false;
             IsRedirect = false;
 
-            /*hub = new hubBuilder()
-               .WithUrl($"http://172.16.3.63:5565/chathub")
-             .Build();*/
-            
 
             LoginCommand = new Command(async () =>
             {
-
+                //Pop Modal Page
                 await Application.Current.MainPage.Navigation.PopModalAsync();
             });
 
@@ -53,7 +49,7 @@ namespace ChatAppV3.ViewModels
             {
                 if (IsRegister)
                 {
-
+                       //Pop Modal Page
                     await Application.Current.MainPage.Navigation.PopModalAsync();
 
                     await DisconnectAsync();

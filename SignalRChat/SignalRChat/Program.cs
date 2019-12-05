@@ -28,11 +28,16 @@ namespace SignalRChat
 
         public static void Main(string[] args)
         {
+
+            //StartUP Hub
+            //Get All necessary information from DB
             DbStartUp db = new DbStartUp();
             var getGroups = db.GetGroups();
             var getUsers = db.GetUsers();
+
             groups = getGroups;
             userlist = getUsers;
+
             CreateWebHostBuilder(args).Build().Run();
 
            

@@ -40,7 +40,6 @@ namespace SignalRChat.Database
                             UserID = Convert.ToString(reader["id"]),
                             IsConnected = false
                         };
-                      //  Console.WriteLine((string)reader["groupName"] + " " + (string)reader["name"]);
                         if(groups.Exists(g => g.GroupID == Convert.ToString( reader["groupID"])))
                         {
                             //Exist
@@ -49,6 +48,8 @@ namespace SignalRChat.Database
                         }
                         else
                         {
+                            //New Group
+
                             GroupModel group = new GroupModel() {
                                 GroupID = Convert.ToString( reader["groupID"]),
                                 GroupName = (string)reader["groupName"],
@@ -56,13 +57,11 @@ namespace SignalRChat.Database
                             };
                             group.Users.Add(user);
                             groups.Add(group);
-                            //New Group
                         }
                     }
                 }
 
                 conn.Close();
-                Console.WriteLine("Up and running...");
                 return groups;
             }
 
@@ -98,6 +97,7 @@ namespace SignalRChat.Database
 
 
                 conn.Close();
+                Console.WriteLine("Up and running...");
 
                 return ls;
             }

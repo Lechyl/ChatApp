@@ -13,7 +13,7 @@ namespace ChatAppV3
 
 
 
-            MainPage = new NavigationPage(new LoginPage());
+            MainPage = new NavigationPage(new LoginPage()) {BarBackgroundColor = Color.FromHex("#2ac2c5"), Title = "Chat App" };
 
 
 

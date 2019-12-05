@@ -31,7 +31,6 @@ namespace SignalRChat.Database
                 cmd.Parameters.AddWithValue("@name", "%"+search+"%");
                 cmd.Parameters.AddWithValue("@email", "%"+search+ "%");
 
-                Console.WriteLine($"select name,id from Users where (name like @name or email like @email) and id not in({ids})");
 
 
                 SqlDataReader reader = cmd.ExecuteReader();

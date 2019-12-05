@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:ChatAppV3.ViewModels"
              xmlns:converters="clr-namespace:ChatAppV3.Converters"
              mc:Ignorable="d"
-             x:Class="ChatAppV3.Views.ChatPage" x:Name="page">
+             x:Class="ChatAppV3.Views.ChatPage" x:Name="Page">
 
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -47,12 +47,12 @@
             HorizontalTextAlignment="Start"
             Text="Close"
             TextColor="White">
-            <Label.GestureRecognizers>
-                <TapGestureRecognizer Command="{Binding DisconnectCommand}"/>
-            </Label.GestureRecognizers>
-        </Label>
-            
-        <Label
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding DisconnectCommand}"/>
+                </Label.GestureRecognizers>
+            </Label>
+
+            <Label
             Grid.Column="1" 
             Grid.Row="0"
             LineBreakMode="TailTruncation"    
@@ -62,9 +62,9 @@
             HorizontalTextAlignment="Center"
             Text="{Binding GroupName}"
             TextColor="White" />
-          
-           
-        <Label            
+
+
+            <Label            
             Grid.Column="2"
             Grid.Row="0"
             Margin="10"
@@ -74,10 +74,10 @@
             Text="+"
             TextColor="White"
             >
-            <Label.GestureRecognizers>
-                <TapGestureRecognizer Command="{Binding ShowSearch}" NumberOfTapsRequired="1"/>
-            </Label.GestureRecognizers>
-        </Label>
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding ShowSearch}" NumberOfTapsRequired="1"/>
+                </Label.GestureRecognizers>
+            </Label>
             <SearchBar  Grid.Row="1" Grid.ColumnSpan="3" Placeholder="Search user by name or Email" CancelButtonColor="Red" IsVisible="{Binding IsSearching}" Text="{Binding SearchName}" SearchCommand="{Binding SearchCommand}"/>
 
         </Grid>
@@ -90,11 +90,10 @@
                             <Label Text="{Binding Name}">
                             </Label>
                             <StackLayout.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding Path=BindingContext.AddUserCommand, Source={x:Reference page} }" CommandParameter="{Binding .}" NumberOfTapsRequired="1"/>
-
+                                <TapGestureRecognizer Command="{Binding Path=BindingContext.AddUserCommand, Source={x:Reference Page} }" CommandParameter="{Binding .}" NumberOfTapsRequired="1"/>
                             </StackLayout.GestureRecognizers>
                         </StackLayout>
-                        
+
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>

@@ -7,43 +7,43 @@
              xmlns:converter="clr-namespace:ChatAppV3.Converters"
              mc:Ignorable="d"
              x:Class="ChatAppV3.Views.RegisterPage">
-    
+
     <ContentPage.BindingContext>
         <local:RegisterVM/>
     </ContentPage.BindingContext>
-    
+
     <ContentPage.Resources>
         <ResourceDictionary>
             <converter:InverseBoolConverter x:Key="InverseBool"/>
         </ResourceDictionary>
     </ContentPage.Resources>
-    
-    <Grid>
-    <Label HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Text="Creating new account. Please wait a few secounds ..." IsVisible="{Binding IsRedirect}"/>
 
-    <Grid IsVisible="{Binding IsRedirect, Converter={StaticResource InverseBool}}">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height=".5*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <Label Grid.Row="0" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Text="Register User Form" FontSize="Title" TextColor="Black"/>
-        <Editor Grid.Row="1" Placeholder="Name" Text="{Binding Name}"/>
-        <Editor Grid.Row="2" Placeholder="Email" Text="{Binding Email}"/>
-        <Editor Grid.Row="3" Placeholder="Password" Text="{Binding Password}"/>
-        <Label Grid.Row="4" Text="{Binding ErrorMsg}" TextColor="Red" IsVisible="{Binding IsError}"/>
-        <Button Grid.Row="5" Text="Register" Command="{Binding RegisterCommand}"/>
-        <Label Grid.Row="6" Text="I have an account" TextColor="#0000EE" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" TextDecorations="Underline">
-            <Label.GestureRecognizers>
-                <TapGestureRecognizer Command="{Binding LoginCommand}"  NumberOfTapsRequired="1"/>
-            </Label.GestureRecognizers>
-        </Label>
+    <Grid>
+        <Label HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Text="Creating new account. Please wait a few secounds ..." IsVisible="{Binding IsRedirect}"/>
+
+        <Grid IsVisible="{Binding IsRedirect, Converter={StaticResource InverseBool}}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height=".5*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Label Grid.Row="0" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Text="Register User Form" FontSize="Title" TextColor="Black"/>
+            <Editor Grid.Row="1" Placeholder="Name" Text="{Binding Name}"/>
+            <Editor Grid.Row="2" Placeholder="Email" Text="{Binding Email}"/>
+            <Editor Grid.Row="3" Placeholder="Password" Text="{Binding Password}"/>
+            <Label Grid.Row="4" Text="{Binding ErrorMsg}" TextColor="Red" IsVisible="{Binding IsError}"/>
+            <Button Grid.Row="5" Text="Register" Command="{Binding RegisterCommand}"/>
+            <Label Grid.Row="6" Text="I have an account" TextColor="#0000EE" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" TextDecorations="Underline">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding LoginCommand}"  NumberOfTapsRequired="1"/>
+                </Label.GestureRecognizers>
+            </Label>
         </Grid>
     </Grid>
 </ContentPage>

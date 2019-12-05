@@ -13,77 +13,15 @@ using System.Text.Json.Serialization;
 
 namespace ChatAppV3.ViewModels
 {
-    class LoginVM : HubConnClient ,INotifyPropertyChanged
+    class LoginVM : HubConnClient, INotifyPropertyChanged
     {
         public LoginVM()
         {
             IsError = false;
 
 
-            // hub = new hubBuilder()
-            //   .WithUrl($"http://172.16.3.63:5565/chathub")
-            // .Build();
 
-
-            hub.On<string[]>("ReceiveAccount", async (arr) =>
-            {
-                
-                if (int.Parse(arr[3]) > 0)
-                {
-
-                    UserModel user = new UserModel() 
-                    {
-                        Name = arr[0],
-                        Email = arr[1],
-                        Password = arr[2],
-                        UserID = arr[3]
-                        
-                        
-                    };
-
-                    //Serialize Object to json because the storage only takes primitive types
-                    var userJSON = JsonSerializer.Serialize<UserModel>(user);
-                    if (Application.Current.Properties.ContainsKey("UserData"))
-                    {
-                        Application.Current.Properties["UserData"] = userJSON;
-
-                    }
-                    else
-                    {
-                        //add key/pair to storage
-
-                        Application.Current.Properties.Add("UserData", userJSON);
-
-                    }
-                    //Save changes
-                    await Application.Current.SavePropertiesAsync();
-
-
-                    //FriendListVM viewModel = new FriendListVM();
-
-                    //  FriendListPage page = new FriendListPage();
-
-                    // page.BindingContext = viewModel;
-
-                    var page = new MasterDetailPage()
-                    {
-                        Master = new SideBarPage() { Title = "Main Page" },
-                        Detail = new NavigationPage(new FriendListPage())
-                    };
-                    await Application.Current.MainPage.Navigation.PushModalAsync(page, false);
-
-                    // await Application.Current.MainPage.Navigation.PushModalAsync(page);
-                }
-                else
-                {
-
-                    IsError = true;
-                    ErrorMsg = "Email and/or Password are incorrect!";
-
-                }
-            });
-
-            LoginCommand = new Command(async() =>
+            LoginCommand = new Command(async () =>
             {
                 await ConnectAsync();
 
@@ -103,14 +41,69 @@ namespace ChatAppV3.ViewModels
 
             RegisterCommand = new Command(async () =>
             {
-                //RegisterVM registerVM = new RegisterVM();
-
-                //RegisterPage registerPage = new RegisterPage();
-
-                //registerPage.BindingContext = registerVM;
+                //Navigate to Modal Page
                 await Application.Current.MainPage.Navigation.PushModalAsync(new RegisterPage(), false);
 
             });
+
+            hub.On<string[]>("ReceiveAccount", async (arr) =>
+            {
+
+                if (int.Parse(arr[3]) > 0)
+                {
+                    //Receive User Data from DB/Hub
+                    UserModel user = new UserModel()
+                    {
+                        Name = arr[0],
+                        Email = arr[1],
+                        Password = arr[2],
+                        UserID = arr[3]
+
+
+                    };
+
+                    //Serialize Object to json because the storage only takes primitive types
+                    var userJSON = JsonSerializer.Serialize<UserModel>(user);
+                    if (Application.Current.Properties.ContainsKey("UserData"))
+                    {
+                        Application.Current.Properties["UserData"] = userJSON;
+
+                    }
+                    else
+                    {
+                        //add key/pair to storage
+
+                        Application.Current.Properties.Add("UserData", userJSON);
+
+                    }
+                    //Save changes
+                    await Application.Current.SavePropertiesAsync();
+
+                    //Create MasterDetailPage
+                    //MasterDetailPage is two pages with Sidebar functionality.
+                    //Detail is the Root Page
+                    //Master is the page/Sidebar you call when you click on Menu Icon
+                    var page = new MasterDetailPage()
+                    {
+                        Master = new SideBarPage() { Title = "Main Page" },
+                        Detail = new NavigationPage(new FriendListPage()) { BarBackgroundColor = Color.FromHex("#2ac2c5") }
+
+                    };
+
+                    //Navigate to Modal page
+                    await Application.Current.MainPage.Navigation.PushModalAsync(page, false);
+
+                }
+                else
+                {
+
+                    IsError = true;
+                    ErrorMsg = "Email and/or Password are incorrect!";
+
+                }
+            });
+
+
         }
 
         private bool isError;
@@ -169,7 +162,6 @@ namespace ChatAppV3.ViewModels
         {
             await hub.InvokeAsync("LogIn", email, password);
         }
-
 
     }
 }

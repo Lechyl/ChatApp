@@ -15,11 +15,9 @@ namespace SignalRChat.Database
         {
 
             UserModel user = new UserModel();
-            //user.Friends = new List<FriendsModel>();
             List<GroupModel> assignedGroups = new List<GroupModel>();
             string connetionString = "Server= DESKTOP-K46TA7S; Database= ChatDB; Integrated Security=True;";
 
-           // string[] arr = new string[5];
             VerifiedUser = false;
 
             //Check if user exist
@@ -81,7 +79,6 @@ namespace SignalRChat.Database
                     {
                         if (reader.HasRows)
                         {
-                            
 
                             user.Friends.Add(new FriendsModel()
                             {
@@ -93,7 +90,6 @@ namespace SignalRChat.Database
                     }
                     connection.Close();
                 }
-                // Get Groups
 
             }
 

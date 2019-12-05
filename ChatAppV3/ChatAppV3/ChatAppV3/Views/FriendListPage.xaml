@@ -16,26 +16,16 @@
     <ContentPage.BindingContext>
         <local:FriendListVM />
     </ContentPage.BindingContext>
-    <Grid >
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="3*"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <!--  <BoxView Grid.Row="0" Grid.ColumnSpan="3" BackgroundColor="#2ac2c5" />
-                <Button Grid.Row="0" Grid.Column="0" Text="menu" Command="{Binding MenuCommand}"/>
-                <Button Grid.Row="0" Grid.Column="1" Text="Create Group" Command="{Binding ShowAddGroupCommand}"/>
-                <Button Grid.Row="0" Grid.Column="2" Text="LogOut" Command="{Binding LogOutCommand}"/>
-                 -->
 
-        <ListView Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="3" ItemsSource="{Binding Groups}" SelectionMode="Single" ItemTapped="MyTappedItem" IsPullToRefreshEnabled="True" RefreshCommand="{Binding RefreshCommand}" IsRefreshing="{Binding IsRefreshed, Mode=OneWay}">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Create Group" Command="{Binding AddGroupCommand}"/>
+
+    </ContentPage.ToolbarItems>
+
+
+
+    <Grid >
+        <ListView ItemsSource="{Binding Groups}" SelectionMode="Single" ItemTapped="MyTappedItem" IsPullToRefreshEnabled="True" RefreshCommand="{Binding RefreshCommand}" IsRefreshing="{Binding IsRefreshed, Mode=OneWay}">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
@@ -61,5 +51,8 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+        <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" IsVisible="{Binding IsCheckmarked}">
+            <Image HeightRequest="100"  Source="check.png" />
+        </StackLayout>
     </Grid>
 </ContentPage>

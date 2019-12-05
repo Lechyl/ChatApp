@@ -11,19 +11,14 @@
         <local:SideBarVM/>
     </ContentPage.BindingContext>
     <Grid>
-    <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
+        <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
 
-            <Label Text="Create Group">
+            <Label Text="Log out" Margin="20" TextColor="Black">
                 <Label.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding ShowAddGroupCommand}"/>
+                    <TapGestureRecognizer Command="{Binding LogOutCommand}"/>
                 </Label.GestureRecognizers>
             </Label>
-            <Label Text="Log out">
-            <Label.GestureRecognizers>
-                <TapGestureRecognizer Command="{Binding LogOutCommand}"/>
-            </Label.GestureRecognizers>
-        </Label>
-    </StackLayout>
+        </StackLayout>
     </Grid>
 
 </ContentPage>
