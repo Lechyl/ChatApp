@@ -70,7 +70,7 @@ namespace ChatAppV3.ViewModels
                 //Binding ViewModel to View
                 page.BindingContext = vm;
                 //Navigate to page
-                await Application.Current.MainPage.Navigation.PushAsync(page, false);
+                await Application.Current.MainPage.Navigation.PushAsync(page);
 
             });
 

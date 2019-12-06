@@ -45,7 +45,7 @@
             FontSize="20"
             HorizontalOptions="FillAndExpand"
             HorizontalTextAlignment="Start"
-            Text="Close"
+            Text="Back"
             TextColor="White">
                 <Label.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding DisconnectCommand}"/>
@@ -81,7 +81,6 @@
             <SearchBar  Grid.Row="1" Grid.ColumnSpan="3" Placeholder="Search user by name or Email" CancelButtonColor="Red" IsVisible="{Binding IsSearching}" Text="{Binding SearchName}" SearchCommand="{Binding SearchCommand}"/>
 
         </Grid>
-
         <ListView Grid.Row="1" ItemsSource="{Binding Friends}" IsVisible="{Binding IsSearching}" SelectionMode="Single" IsPullToRefreshEnabled="False">
             <ListView.ItemTemplate>
                 <DataTemplate>
@@ -98,6 +97,7 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+        <Label Grid.Row="1" Text="No User Found" HorizontalOptions="CenterAndExpand" FontSize='Subtitle' IsVisible="{Binding HasUsers,Converter={StaticResource InverseBool}}"/>
 
         <!--Chat room-->
         <ListView

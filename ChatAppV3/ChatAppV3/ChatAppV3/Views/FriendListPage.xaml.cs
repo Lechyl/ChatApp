@@ -54,7 +54,7 @@ namespace ChatAppV3.Views
             }
 
             //Navigate to Modal page
-            await Navigation.PushModalAsync(new ChatPage(), false);
+            await Navigation.PushModalAsync(new ChatPage());
 
         }
 

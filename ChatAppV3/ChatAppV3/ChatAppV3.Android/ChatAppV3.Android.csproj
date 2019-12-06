@@ -89,7 +89,7 @@
     <AndroidResource Include="Resources\mipmap-xxxhdpi\launcher_foreground.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\check.png" />
+    <AndroidResource Include="Resources\drawable\Checkmark.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ChatAppV3\ChatAppV3.csproj">

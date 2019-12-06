@@ -1104,4 +1104,4 @@ C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3.Android\obj\
 C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3.Android\obj\Debug\90\android\src\md51558244f76c53b6aeda52c8a337f2c37\StructuredItemsViewAdapter_2.java
 C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3.Android\obj\Debug\90\android\src\md51558244f76c53b6aeda52c8a337f2c37\StructuredItemsViewRenderer_3.java
 C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3.Android\obj\Debug\90\android\src\md5423e3a95c357eb7d6aad61b4f54abbd4\RecyclerViewScrollListener_2.java
-C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3.Android\obj\Debug\90\res\drawable\check.png
+C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3.Android\obj\Debug\90\res\drawable\checkmark.png

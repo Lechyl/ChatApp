@@ -21,6 +21,7 @@ namespace ChatAppV3.ViewModels
             //Instantiate
             StartOptions();
             IsSearching = false;
+            HasUsers = true;
             Messages = new ObservableCollection<MessageModel>();
             Friends = new ObservableCollection<FriendsModel>();
 
@@ -98,18 +99,23 @@ namespace ChatAppV3.ViewModels
 
             });
 
-            hub.On<List<FriendsModel>>("ReceiveSearchUsers", (ls) =>
+            hub.On<List<FriendsModel>,bool>("ReceiveSearchUsers", (ls,hasUsers) =>
             {
                 //Clear List and insert new data
                 Friends.Clear();
-                foreach (var item in ls)
+                HasUsers = hasUsers;
+                if (hasUsers)
                 {
-                    Friends.Add(new FriendsModel()
+                    foreach (var item in ls)
                     {
-                        FriendID = item.FriendID,
-                        Name = item.Name
-                    });
+                        Friends.Add(new FriendsModel()
+                        {
+                            FriendID = item.FriendID,
+                            Name = item.Name
+                        });
+                    }
                 }
+
 
             });
 
@@ -134,7 +140,18 @@ namespace ChatAppV3.ViewModels
         private ObservableCollection<MessageModel> _messages;
         private ObservableCollection<FriendsModel> _friends;
         private bool isSearching;
+        private bool hasUsers;
 
+        public bool HasUsers
+        {
+            get => hasUsers;
+            set
+            {
+                hasUsers = value;
+
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasUsers)));
+            }
+        }
         public ObservableCollection<FriendsModel> Friends
         {
             get => _friends;

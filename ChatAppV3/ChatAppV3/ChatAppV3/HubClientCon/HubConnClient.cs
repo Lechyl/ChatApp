@@ -9,13 +9,13 @@ namespace ChatAppV3.HubClientCon
 {
     class HubConnClient
     {
-        public HubConnection hub;
+        public HubConnection hub { get; }
         public bool IsConnected { get; set; }
         public HubConnClient()
         {
             //Insert ipaddress of your Hub
             hub = new HubConnectionBuilder()
-                .WithUrl($"http://172.16.3.54:5565/chathub")
+                .WithUrl($"http://172.16.3.61:5565/chathub")
                     .WithAutomaticReconnect()
                         .Build();
 
@@ -31,7 +31,7 @@ namespace ChatAppV3.HubClientCon
                     {
                         await DisconnectAsync();
 
-                        await Application.Current.MainPage.Navigation.PopModalAsync(false);
+                        await Application.Current.MainPage.Navigation.PopModalAsync();
 
                     }
                 }

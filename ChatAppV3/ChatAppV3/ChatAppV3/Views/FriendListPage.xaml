@@ -52,7 +52,7 @@
             </ListView.ItemTemplate>
         </ListView>
         <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" IsVisible="{Binding IsCheckmarked}">
-            <Image HeightRequest="100"  Source="check.png" />
+            <Image HeightRequest="{OnPlatform Android=100,iOS=70}"  Source="Checkmark" HorizontalOptions="Center"  />
         </StackLayout>
     </Grid>
 </ContentPage>

@@ -28,6 +28,8 @@ namespace ChatAppV3.ViewModels
                 if (!string.IsNullOrWhiteSpace(Email) && !string.IsNullOrWhiteSpace(Password))
                 {
                     await Login(Email, Password);
+                    Email = string.Empty;
+                    Password = string.Empty;
                 }
                 else
                 {
@@ -42,7 +44,7 @@ namespace ChatAppV3.ViewModels
             RegisterCommand = new Command(async () =>
             {
                 //Navigate to Modal Page
-                await Application.Current.MainPage.Navigation.PushModalAsync(new RegisterPage(), false);
+                await Application.Current.MainPage.Navigation.PushModalAsync(new RegisterPage());
 
             });
 
@@ -91,7 +93,7 @@ namespace ChatAppV3.ViewModels
                     };
 
                     //Navigate to Modal page
-                    await Application.Current.MainPage.Navigation.PushModalAsync(page, false);
+                    await Application.Current.MainPage.Navigation.PushModalAsync(page);
 
                 }
                 else

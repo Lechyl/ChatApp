@@ -5716,7 +5716,7 @@ namespace ChatAppV3.Droid
 			public const int avd_show_password = 2131165275;
 			
 			// aapt resource value: 0x7F07005C
-			public const int check = 2131165276;
+			public const int Checkmark = 2131165276;
 			
 			// aapt resource value: 0x7F07005D
 			public const int design_bottom_navigation_item_background = 2131165277;

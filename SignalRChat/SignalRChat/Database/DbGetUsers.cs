@@ -10,11 +10,11 @@ namespace SignalRChat.Database
 {
     public class DbGetUsers
     {
-
-        public async Task<List<FriendsModel>> GetUsers(GroupModel group,string userID,string searchVal)
+        public bool HasUsers { get; set; }
+        public async Task<List<FriendsModel>> GetUsers(GroupModel group, string userID, string searchVal)
         {
 
-            string ids ="";
+            string ids = "";
             foreach (var item in group.Users)
             {
                 ids += item.UserID + ",";
@@ -28,22 +28,32 @@ namespace SignalRChat.Database
                 await conn.OpenAsync();
                 string query = $"select name,id from Users where (name like @name or email like @email) and id not in({ids})";
                 SqlCommand cmd = new SqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@name", "%"+search+"%");
-                cmd.Parameters.AddWithValue("@email", "%"+search+ "%");
+                cmd.Parameters.AddWithValue("@name", "%" + search + "%");
+                cmd.Parameters.AddWithValue("@email", "%" + search + "%");
 
 
 
                 SqlDataReader reader = cmd.ExecuteReader();
-                while(await reader.ReadAsync())
+                while (await reader.ReadAsync())
                 {
-                    ls.Add(new FriendsModel()
+                    if (reader.HasRows)
                     {
-                        FriendID = Convert.ToString(reader["id"]),
-                        Name = (string)reader["name"]
+                        HasUsers = true;
+                        ls.Add(new FriendsModel()
+                        {
+                            FriendID = Convert.ToString(reader["id"]),
+                            Name = (string)reader["name"]
 
-                    }) ;
+                        });
+
+                    }
+                    else
+                    {
+                        HasUsers = false;
+                    }
+
                 }
-                
+
                 conn.Close();
                 return ls;
             }

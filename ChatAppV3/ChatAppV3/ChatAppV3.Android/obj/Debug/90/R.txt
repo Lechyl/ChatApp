@@ -952,7 +952,7 @@ int drawable abc_textfield_search_material 0x7f070058
 int drawable abc_vector_test 0x7f070059
 int drawable avd_hide_password 0x7f07005a
 int drawable avd_show_password 0x7f07005b
-int drawable check 0x7f07005c
+int drawable checkmark 0x7f07005c
 int drawable design_bottom_navigation_item_background 0x7f07005d
 int drawable design_fab_background 0x7f07005e
 int drawable design_ic_visibility 0x7f07005f

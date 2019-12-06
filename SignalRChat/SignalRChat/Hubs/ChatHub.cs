@@ -247,7 +247,7 @@ namespace SignalRChat.Hubs
                 newls = ls;
 
                 string cid = Context.ConnectionId;
-                await Clients.Client(cid).SendAsync("ReceiveSearchUsers", ls);
+                await Clients.Client(cid).SendAsync("ReceiveSearchUsers", ls,db.HasUsers);
 
             }
         }
@@ -339,8 +339,6 @@ namespace SignalRChat.Hubs
                 if (program.users.Users.Exists(u => u.UserID == userID))
                 {
                     program.users.Users.Find(u => u.UserID == userID).ConnectionID = cid;
-
-                    Console.WriteLine("hey");
 
                     //Reconnect to all subscripted Groups and makes it possible to connect from multiple devices
                     foreach (var item in program.users.Groups.Where(g => g.Users.Exists(u => u.UserID == userID)))

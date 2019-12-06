@@ -4534,7 +4534,7 @@ public final class R {
     public static final int abc_vector_test=0x7f070059;
     public static final int avd_hide_password=0x7f07005a;
     public static final int avd_show_password=0x7f07005b;
-    public static final int check=0x7f07005c;
+    public static final int checkmark=0x7f07005c;
     public static final int design_bottom_navigation_item_background=0x7f07005d;
     public static final int design_fab_background=0x7f07005e;
     public static final int design_ic_visibility=0x7f07005f;
