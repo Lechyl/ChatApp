@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:ChatAppV3.ViewModels"
+             mc:Ignorable="d"
+             x:Class="ChatAppV3.Views.GroupViewPage" x:Name="page">
+
+    <ContentPage.BindingContext>
+        <local:GroupViewVM/>
+    </ContentPage.BindingContext>
+
+
+        <StackLayout>
+        <Grid>
+            <BoxView BackgroundColor="#2ac2c5"/>
+
+            <Label Text="Back" TextColor="White" FontSize="20" Margin="5">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding GoBack}"/>
+                </Label.GestureRecognizers>
+            </Label>
+        </Grid>
+        <Label HorizontalOptions="Center" Text="All Users in this group"/>
+        <ListView  ItemsSource="{Binding UsersInGroup}" SelectionMode="Single">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                    <ViewCell>
+                        <ViewCell.ContextActions>
+                            
+                            <MenuItem Text="Kick User" Command="{Binding Source={x:Reference page}, Path=BindingContext.KickUserCommand}" CommandParameter="{Binding .}" IsDestructive="True" />
+                        </ViewCell.ContextActions>
+                        <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+
+                                </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0" Text="{Binding Name}" VerticalTextAlignment="Center" FontSize="Medium" Margin="10"/>
+
+                        </Grid>
+
+                        <!--<Button Grid.Column="1" HorizontalOptions="EndAndExpand" Text="Kick User" Command="{}" CommandParameter="{Binding FriendID}"/>-->
+
+                    </ViewCell>
+                </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>
+</ContentPage>

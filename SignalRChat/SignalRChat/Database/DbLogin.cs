@@ -15,7 +15,7 @@ namespace SignalRChat.Database
         {
 
             UserModel user = new UserModel();
-            List<GroupModel> assignedGroups = new List<GroupModel>();
+           // List<GroupModel> assignedGroups = new List<GroupModel>();
             string connetionString = "Server= DESKTOP-K46TA7S; Database= ChatDB; Integrated Security=True;";
 
             VerifiedUser = false;
@@ -40,7 +40,7 @@ namespace SignalRChat.Database
                             user.Name = (string)reader["name"];
                             user.Email = (string)reader["email"];
                             user.Password = (string)reader["password"];
-                            user.ConnectionID = inputConnectionID;
+                            user.ConnectionID.Add(inputConnectionID);
                             user.UserID = Convert.ToString(reader["id"]);
 
                             VerifiedUser = true;
@@ -49,6 +49,7 @@ namespace SignalRChat.Database
                         }
                     }
                 }
+                command.Dispose();
                 connection.Close();
 
             }
@@ -63,6 +64,7 @@ namespace SignalRChat.Database
                     command1.Parameters.AddWithValue("@email", inputEmail);
 
                     await command1.ExecuteReaderAsync();
+                    command1.Dispose();
                     connection.Close();
                 }
 
@@ -88,6 +90,7 @@ namespace SignalRChat.Database
                         }
 
                     }
+                    command1.Dispose();
                     connection.Close();
                 }
 

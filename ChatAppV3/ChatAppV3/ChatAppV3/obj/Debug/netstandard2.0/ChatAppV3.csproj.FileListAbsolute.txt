@@ -11,7 +11,6 @@ C:\Users\aznzl\source\repos\ChatAppV3\ChatAppV3\ChatAppV3\obj\Debug\netstandard2
 C:\Users\aznzl\source\repos\ChatAppV3\ChatAppV3\ChatAppV3\obj\Debug\netstandard2.0\ChatAppV3.dll
 C:\Users\aznzl\source\repos\ChatAppV3\ChatAppV3\ChatAppV3\obj\Debug\netstandard2.0\ref\ChatAppV3.dll
 C:\Users\aznzl\source\repos\ChatAppV3\ChatAppV3\ChatAppV3\obj\Debug\netstandard2.0\ChatAppV3.pdb
-C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3\obj\Debug\netstandard2.0\ChatAppV3.csprojAssemblyReference.cache
 C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3\obj\Debug\netstandard2.0\App.xaml.g.cs
 C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3\obj\Debug\netstandard2.0\Views\ChatPage.xaml.g.cs
 C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3\obj\Debug\netstandard2.0\Views\FriendListPage.xaml.g.cs
@@ -28,3 +27,5 @@ C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3\bin\Debug\ne
 C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3\bin\Debug\netstandard2.0\ChatAppV3.pdb
 C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3\obj\Debug\netstandard2.0\XamlC.stamp
 C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3\obj\Debug\netstandard2.0\Views\SideBarPage.xaml.g.cs
+C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3\obj\Debug\netstandard2.0\ChatAppV3.csprojAssemblyReference.cache
+C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3\obj\Debug\netstandard2.0\Views\GroupViewPage.xaml.g.cs

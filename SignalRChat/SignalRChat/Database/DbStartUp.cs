@@ -18,7 +18,7 @@ namespace SignalRChat.Database
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                  conn.Open();
-                string query = "select gc.groupID,g.groupName, u.id,u.name,u.email,u.password,u.connectionID from Group_connections as gc inner join Users as u on u.id = gc.userID inner join Groups as g on g.id = gc.groupID order by gc.groupID";
+                string query = "select gc.groupID,g.groupName, u.id,u.name,u.email,u.password from Group_connections as gc inner join Users as u on u.id = gc.userID inner join Groups as g on g.id = gc.groupID order by gc.groupID";
                 SqlCommand cmd = new SqlCommand(query, conn);
 
 
@@ -36,7 +36,6 @@ namespace SignalRChat.Database
                             Name = (string)reader["name"],
                             Email = (string)reader["email"],
                             Password = (string)reader["password"],
-                            ConnectionID = (string)reader["connectionID"],
                             UserID = Convert.ToString(reader["id"]),
                             IsConnected = false
                         };
@@ -60,7 +59,7 @@ namespace SignalRChat.Database
                         }
                     }
                 }
-
+                cmd.Dispose();
                 conn.Close();
                 return groups;
             }
@@ -95,7 +94,7 @@ namespace SignalRChat.Database
 
                 }
 
-
+                cmd.Dispose();
                 conn.Close();
                 Console.WriteLine("Up and running...");
 

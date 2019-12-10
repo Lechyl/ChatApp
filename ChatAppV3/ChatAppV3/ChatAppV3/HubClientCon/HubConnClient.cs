@@ -9,15 +9,15 @@ namespace ChatAppV3.HubClientCon
 {
     class HubConnClient
     {
-        public HubConnection hub { get; }
-        public bool IsConnected { get; set; }
+        protected static HubConnection hub = new HubConnectionBuilder()
+                .WithUrl($"http://172.16.3.74:5565/chathub")
+                    .WithAutomaticReconnect()
+                        .Build();
+        protected static bool IsConnected { get; set; }
         public HubConnClient()
         {
             //Insert ipaddress of your Hub
-            hub = new HubConnectionBuilder()
-                .WithUrl($"http://172.16.3.61:5565/chathub")
-                    .WithAutomaticReconnect()
-                        .Build();
+            
 
             //if connection shutdown on error trying to revive.
             hub.Closed += async (error) =>

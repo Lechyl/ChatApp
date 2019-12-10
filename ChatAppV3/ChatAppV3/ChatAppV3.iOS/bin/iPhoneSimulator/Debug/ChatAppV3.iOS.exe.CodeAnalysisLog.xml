@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="c:\program files (x86)\microsoft visual studio\2019\enterprise\team tools\static analysis tools\fxcop\Xml\CodeAnalysisReport.xsl"?>
+<FxCopReport Version="16.0">
+ <Targets>
+  <Target Name="C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3.iOS\bin\iPhoneSimulator\Debug\ChatAppV3.iOS.exe">
+   <Modules>
+    <Module Name="chatappv3.ios.exe">
+     <Namespaces>
+      <Namespace Name="ChatAppV3.iOS">
+       <Types>
+        <Type Name="AppDelegate" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#FinishedLaunching(UIKit.UIApplication,Foundation.NSDictionary)" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="TransparentMethodsMustNotReferenceCriticalCodeFxCopRule" Category="Microsoft.Security" CheckId="CA2140" Status="Active" Created="2019-12-09 12:18:09Z" FixCategory="DependsOnFix">
+             <Issue Name="MethodReference" Certainty="99" Level="CriticalError" Path="C:\Users\aznzl\Desktop\Github\ChatApp\ChatAppV3\ChatAppV3\ChatAppV3.iOS" File="AppDelegate.cs" Line="24">Transparent method 'AppDelegate.FinishedLaunching(UIApplication, NSDictionary)' references security critical method 'App.App()'.  In order for this reference to be allowed under the security transparency rules, either 'AppDelegate.FinishedLaunching(UIApplication, NSDictionary)' must become security critical or safe-critical, or 'App.App()' become security safe-critical or transparent.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+       </Types>
+      </Namespace>
+     </Namespaces>
+    </Module>
+   </Modules>
+  </Target>
+ </Targets>
+ <Rules>
+  <Rule TypeName="TransparentMethodsMustNotReferenceCriticalCodeFxCopRule" Category="Microsoft.Security" CheckId="CA2140">
+   <Name>Transparent code must not reference security critical items</Name>
+   <Description>Transparent code cannot refer to security critical methods, types, or fields.  At runtime these references will result in MemberAccessExceptions or TypeLoadExceptions.</Description>
+   <Resolution Name="MethodReference">Transparent method {0} references security critical method {1}.  In order for this reference to be allowed under the security transparency rules, either {0} must become security critical or safe-critical, or {1} become security safe-critical or transparent.</Resolution>
+   <Owner />
+   <Url>http://msdn.microsoft.com/library/bb264475(VS.100).aspx</Url>
+   <Email>[none]</Email>
+   <MessageLevel Certainty="99">CriticalError</MessageLevel>
+   <File Name="securitytransparencyrules.dll" Version="4.0.0.0" />
+  </Rule>
+ </Rules>
+ <Localized>
+  <String Key="Category">Category</String>
+  <String Key="Certainty">Certainty</String>
+  <String Key="CollapseAll">Collapse All</String>
+  <String Key="CheckId">Check Id</String>
+  <String Key="Error">Error</String>
+  <String Key="Errors">error(s)</String>
+  <String Key="ExpandAll">Expand All</String>
+  <String Key="Help">Help</String>
+  <String Key="Line">Line</String>
+  <String Key="Messages">message(s)</String>
+  <String Key="LocationNotStoredInPdb">[Location not stored in Pdb]</String>
+  <String Key="Project">Project</String>
+  <String Key="Resolution">Resolution</String>
+  <String Key="Rule">Rule</String>
+  <String Key="RuleFile">Rule File</String>
+  <String Key="RuleDescription">Rule Description</String>
+  <String Key="Source">Source</String>
+  <String Key="Status">Status</String>
+  <String Key="Target">Target</String>
+  <String Key="Warning">Warning</String>
+  <String Key="Warnings">warning(s)</String>
+  <String Key="ReportTitle">Code Analysis Report</String>
+ </Localized>
+</FxCopReport>

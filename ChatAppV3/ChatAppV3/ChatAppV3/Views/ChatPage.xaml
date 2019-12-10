@@ -34,7 +34,7 @@
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
 
             </Grid.RowDefinitions>
 
@@ -63,7 +63,6 @@
             Text="{Binding GroupName}"
             TextColor="White" />
 
-
             <Label            
             Grid.Column="2"
             Grid.Row="0"
@@ -78,10 +77,19 @@
                     <TapGestureRecognizer Command="{Binding ShowSearch}" NumberOfTapsRequired="1"/>
                 </Label.GestureRecognizers>
             </Label>
-            <SearchBar  Grid.Row="1" Grid.ColumnSpan="3" Placeholder="Search user by name or Email" CancelButtonColor="Red" IsVisible="{Binding IsSearching}" Text="{Binding SearchName}" SearchCommand="{Binding SearchCommand}"/>
+            <StackLayout Grid.Row="1" Grid.ColumnSpan="3"  IsVisible="{Binding IsSearching}">
+                <SearchBar    Placeholder="Add user by search" CancelButtonColor="Red"  Text="{Binding SearchName}" SearchCommand="{Binding SearchCommand}"/>
+            <Label  Margin="10" FontSize="20"  Text="GroupView" TextColor="White" HorizontalOptions="StartAndExpand" VerticalOptions="CenterAndExpand">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding ViewAllUsersInGroup}"/>
+                    </Label.GestureRecognizers>
+            </Label>
+            </StackLayout>
 
         </Grid>
-        <ListView Grid.Row="1" ItemsSource="{Binding Friends}" IsVisible="{Binding IsSearching}" SelectionMode="Single" IsPullToRefreshEnabled="False">
+        <StackLayout Grid.Row="1" IsVisible="{Binding IsSearching}">
+        <Label  Text="{Binding SearchUnderText}" HorizontalOptions="CenterAndExpand" FontSize='Subtitle'/>
+        <ListView  ItemsSource="{Binding Friends}"  SelectionMode="Single" IsPullToRefreshEnabled="False">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
@@ -97,8 +105,7 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <Label Grid.Row="1" Text="No User Found" HorizontalOptions="CenterAndExpand" FontSize='Subtitle' IsVisible="{Binding HasUsers,Converter={StaticResource InverseBool}}"/>
-
+        </StackLayout>
         <!--Chat room-->
         <ListView
             IsVisible="{Binding IsSearching, Converter={StaticResource InverseBool}}"
@@ -129,12 +136,12 @@
                                 <!--if it's not own message-->
                                 <Grid IsVisible="{Binding IsOwnMessage, Converter={StaticResource InverseBool}}" RowSpacing="0">
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="5*" />
-                                        <ColumnDefinition Width="5*" />
+                                        <ColumnDefinition Width="3*" />
+                                        <ColumnDefinition Width="7*" />
                                     </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="*" />
                                     </Grid.RowDefinitions>
                                     <Label
                                         Grid.Column="1"
@@ -157,19 +164,20 @@
                                         <Label
                                             Margin="10"
                                             LineBreakMode="CharacterWrap"
+                                            MaxLines="400"
                                             Text="{Binding Message}"
                                             TextColor="#696f7f"
                                             VerticalOptions="FillAndExpand" />
                                     </Grid>
                                 </Grid>
                                 <!--if it is my own message-->
-                                <Grid IsVisible="{Binding IsOwnMessage}" RowSpacing="0">
+                                <Grid IsVisible="{Binding IsOwnMessage}"  RowSpacing="0">
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="5*" />
-                                        <ColumnDefinition Width="5*" />
+                                        <ColumnDefinition Width="7*" />
+                                        <ColumnDefinition Width="3*" />
                                     </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="*" />
                                         <RowDefinition Height="Auto" />
                                     </Grid.RowDefinitions>
                                     <Label
@@ -177,8 +185,10 @@
                                         HorizontalOptions="Start"
                                         Text="{Binding User}"
                                         TextColor="#969daf" />
+
                                     <Grid
-                                        Grid.Row="1"
+                                        Grid.Row="0"
+                                        Grid.Column="0"
                                         Margin="20,5"
                                         Padding="10"
                                         HorizontalOptions="Start"
@@ -190,8 +200,10 @@
                                         <Label
                                             Margin="10"
                                             LineBreakMode="CharacterWrap"
+                                            MaxLines="200"
                                             Text="{Binding Message}"
                                             TextColor="White"
+                                            HorizontalOptions="FillAndExpand"
                                             VerticalOptions="FillAndExpand" />
                                     </Grid>
                                 </Grid>

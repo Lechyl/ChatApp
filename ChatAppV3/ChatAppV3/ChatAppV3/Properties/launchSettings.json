@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ChatAppV3": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}

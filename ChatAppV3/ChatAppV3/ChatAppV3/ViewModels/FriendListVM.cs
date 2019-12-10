@@ -115,6 +115,7 @@ namespace ChatAppV3.ViewModels
         private ObservableCollection<GroupListModel> groups;
 
 
+
         public bool IsCheckmarked
         {
             get => isCheckmarked;

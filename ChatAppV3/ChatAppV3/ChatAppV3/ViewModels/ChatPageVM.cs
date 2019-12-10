@@ -29,14 +29,26 @@ namespace ChatAppV3.ViewModels
                 await Connect();
             });
 
+
+            ViewAllUsersInGroup = new Command(() =>
+            {
+                Device.BeginInvokeOnMainThread(async() =>
+                {
+                    await Application.Current.MainPage.Navigation.PushModalAsync(new GroupViewPage(), true);
+
+                });
+
+            });
+
             SearchCommand = new Command(async () => {
                 await SearchUsersByName(currentGroup.groupID, user.UserID, SearchName);
-
             });
 
             ShowSearch = new Command(() =>
             {
                 //Clickable button to disable/enable
+                Friends.Clear();
+                SearchUnderText = string.Empty;
                 IsSearching = !IsSearching;
 
             });
@@ -104,8 +116,12 @@ namespace ChatAppV3.ViewModels
                 //Clear List and insert new data
                 Friends.Clear();
                 HasUsers = hasUsers;
+                SearchUnderText = "Search Result Not Found";
+
                 if (hasUsers)
                 {
+                    SearchUnderText = "Search Result Found";
+
                     foreach (var item in ls)
                     {
                         Friends.Add(new FriendsModel()
@@ -119,7 +135,22 @@ namespace ChatAppV3.ViewModels
 
             });
 
-
+            hub.On<string, string,string>("RemovedUserCheck"+currentGroup.groupID,async (removedID, removedName,username) =>
+             {
+                 if(user.UserID == removedID)
+                 {
+                     await Application.Current.MainPage.Navigation.PopModalAsync();
+                 }
+                 else
+                 {
+                     Messages.Add(new MessageModel()
+                     {
+                         IsOwnMessage = false,
+                         IsSystemMessage = true,
+                         Message = $"{removedName} has been kicked by {username}!"
+                     });
+                 }
+             });
 
         }
 
@@ -131,17 +162,30 @@ namespace ChatAppV3.ViewModels
         public Command DisconnectCommand { get; }
         public Command AddUserCommand { get; }
         public Command SearchCommand { get; }
+        public Command ViewAllUsersInGroup { get; }
         private GroupListModel currentGroup;
         private UserModel user;
         private string groupName;
         private string _name;
         private string _message;
         private string _searchName;
+        private string _searchUnderText;
+
         private ObservableCollection<MessageModel> _messages;
         private ObservableCollection<FriendsModel> _friends;
         private bool isSearching;
         private bool hasUsers;
 
+
+        public string SearchUnderText
+        {
+            get => _searchUnderText;
+            set
+            {
+                _searchUnderText = value;
+                OnPropertyChanged();
+            }
+        }
         public bool HasUsers
         {
             get => hasUsers;
@@ -263,7 +307,7 @@ namespace ChatAppV3.ViewModels
         async Task Disconnect()
         {
             //Invoke/Raise hub method, It'll raise/run a specific method in the hub
-            await hub.InvokeAsync("LeaveChat", Name, user.UserID, currentGroup.groupID);
+            await hub.InvokeAsync("LeaveChat",user.UserID, currentGroup.groupID);
         }
 
         protected virtual void OnPropertyChanged([CallerMemberName]string propertyName = "")

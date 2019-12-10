@@ -13,7 +13,7 @@ namespace SignalRChat.Hubs
     public class ChatHub : Hub
     {
         Program program = new Program();
-
+        
         /*static List<UserModel> userlist = new List<UserModel>();
         static List<GroupModel> groups = new List<GroupModel>();
         public static UserContext users = new UserContext()
@@ -42,12 +42,12 @@ namespace SignalRChat.Hubs
 
         //Remember to to create instance with your ipaddress, [SignalRChat -> Properties] insert ipaddress for both http and https ###################### #############
 
-        public async Task LeaveChat(string user, string userID, string groupID)
+        public async Task LeaveChat(string userID, string groupID)
         {
             await ReconnectUser(userID);
-            var group = program.users.Groups.Find(g => g.GroupID == groupID);
+            program.users.Groups.Find(g => g.GroupID == groupID).Users.Find(u => u.UserID == userID).IsConnected = false;
 
-            group.Users.Find(u => u.UserID == userID).IsConnected = false;
+
 
         }
         public async Task SendMsgToGroup(string groupID, string message, string user, string userID)
@@ -118,6 +118,20 @@ namespace SignalRChat.Hubs
          */
         //-------------------------------------------------------------------------------------------------- Group Methods
 
+
+        public async Task ViewAllUsersInGroup(string userID, string groupID)
+        {
+            await ReconnectUser(userID);
+            //Checking if group exist and if the client is inside the group for security measure against unautherorisized users
+            if(program.users.Groups.Find(g => g.GroupID == groupID).Users.Exists( u => u.UserID == userID))
+            {
+                DbGroups db = new DbGroups();
+                List<FriendsModel> newls = new List<FriendsModel>();
+                var ls = await db.GetAllusersInGroup(groupID);
+                newls = ls;
+                await Clients.Client(Context.ConnectionId).SendAsync("ReceiveAllUsersInGroup", newls);
+            }
+        }
         public async Task MyGroupList(string userID)
         {
             await ReconnectUser(userID);
@@ -145,11 +159,36 @@ namespace SignalRChat.Hubs
 
         }
 
+        public async Task RemoveFromGroup(string userID, string removeUserID, string groupID)
+        {
+            await ReconnectUser(userID);
+            //Find group from group list or return Null to optimise my code instead of Check if group exist then Find it afterward from Group list.
+            var foundGroup = program.users.Groups.Exists(g => g.GroupID == groupID) ? program.users.Groups.Find(g => g.GroupID == groupID) : null;
+            //Check if both group and user exist in specific gorup
+            if(foundGroup != null && foundGroup.Users.Exists(u => u.UserID == removeUserID))
+            {
+                //Find user data from user list
+                var foundUser = program.users.Users.Find(u => u.UserID == removeUserID);
+                //Remove user from group in group list and it's connection to group to ensure the user's  non access to group.
+                program.users.Groups.Find(g => g.GroupID == groupID).Users.RemoveAll(u => u.UserID == foundUser.UserID);
+                var user = program.users.Users.Find(u => u.UserID == userID);
+
+                DbGroups db = new DbGroups();
+                await db.RemoveUserFromGroup(foundUser.UserID, foundGroup.GroupID);
+
+                await Clients.Group(groupID).SendAsync("RemovedUserCheck"+groupID, foundUser.UserID, foundUser.Name,user.Name);
+                //remove user connection
+                foreach (string item in foundUser.ConnectionID)
+                {   
+                    await Groups.RemoveFromGroupAsync(item, foundGroup.GroupID);
+
+                }
+            }
+        }
         //Add player to group and/or create group and put yourself into the group
         public async Task AddToGroup(string groupName, string userID, string groupID = null, string friendID = null)
         {
             await ReconnectUser(userID);
-
 
             DbGroups db = new DbGroups();
 
@@ -219,7 +258,11 @@ namespace SignalRChat.Hubs
                                 await db.AddUserToGroup(friendID, groupID);
                                 if (friendUser.IsConnected)
                                 {
-                                    await Groups.AddToGroupAsync(friendUser.ConnectionID, groupID);
+                                    foreach (string item in friendUser.ConnectionID)
+                                    {
+                                        await Groups.AddToGroupAsync(item, groupID);
+
+                                    }
 
                                 }
                             }
@@ -276,14 +319,10 @@ namespace SignalRChat.Hubs
                 stringUser[3] = user.UserID;
 
                 //add user to users list
-                //If user exist delete existing user and readd user.
-                if (program.users.Users.Exists(u => u.UserID == user.UserID))
-                {
-                    program.users.Users.RemoveAll(u => u.UserID == user.UserID);
+                //If user exist delete existing user and re add user with the new data from Database because the existing data could've been deleted or corrupted.
+                //Remove automatically check if item exist.
+                program.users.Users.RemoveAll(u => u.UserID == user.UserID);
 
-
-
-                }
 
                 user.IsConnected = true;
                 program.users.Users.Add(user);
@@ -300,11 +339,8 @@ namespace SignalRChat.Hubs
 
         public void LogOut(string userID)
         {
-            //remove user from user list
+            
             program.users.Users.Find(u => u.UserID == userID).IsConnected = false;
-
-            var group = program.users.Groups.Find(g => g.Users.Exists(u => u.UserID == userID));
-            group.Users.Find(u => u.UserID == userID).IsConnected = false;
         }
 
         //-------------------------------------------------------------------------------------------------- Register Method
@@ -332,13 +368,18 @@ namespace SignalRChat.Hubs
         {
 
 
-            string cid = Context.ConnectionId;
             if (program.users.Users != null)
             {
 
                 if (program.users.Users.Exists(u => u.UserID == userID))
                 {
-                    program.users.Users.Find(u => u.UserID == userID).ConnectionID = cid;
+                    string cid = Context.ConnectionId;
+
+                    //Check if user have this connection id in its list because a client can have multiple connections from multiple devices on a one-to-one connection.
+                    if (!program.users.Users.Find(u => u.UserID == userID).ConnectionID.Contains(cid))
+                    {
+                        program.users.Users.Find(u => u.UserID == userID).ConnectionID.Add(cid);
+                    }
 
                     //Reconnect to all subscripted Groups and makes it possible to connect from multiple devices
                     foreach (var item in program.users.Groups.Where(g => g.Users.Exists(u => u.UserID == userID)))
